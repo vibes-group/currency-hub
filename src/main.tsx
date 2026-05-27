@@ -1,10 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from 'react-router';
-
-import { AppRouter } from '@/config/app-router';
-import { ConfigProvider } from '@/config/config-provider';
-import '@/config/styles/globals.css';
+import '@/app/styles/globals.css';
+import App from './app';
 
 const root = document.getElementById('root');
 
@@ -14,10 +11,6 @@ if (!root) {
 
 createRoot(root).render(
   <StrictMode>
-    <BrowserRouter>
-      <ConfigProvider>
-        <AppRouter />
-      </ConfigProvider>
-    </BrowserRouter>
+    <App />
   </StrictMode>,
 );

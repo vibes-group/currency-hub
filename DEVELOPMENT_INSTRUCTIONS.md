@@ -24,6 +24,7 @@ Primary user flows:
 - TypeScript.
 - Tailwind CSS v4.
 - shadcn/ui.
+- use-intl.
 - Feature-Sliced Design v2.1.
 - IndexedDB for offline data persistence.
 - Service worker for PWA caching.
@@ -325,7 +326,7 @@ For Tailwind v4, edit the global stylesheet owned by the FSD app layer: `src/con
 
 ## Internationalization
 
-Use the local i18n provider in `src/i18n`.
+Use `use-intl` through the provider in `src/i18n`.
 
 Initial locales:
 
