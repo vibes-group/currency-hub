@@ -1,6 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 
-import { DemoPage } from "@/screens/demo";
+import { HomePage } from "@/screens/home";
 
 export default async function Page({
   params,
@@ -11,5 +11,5 @@ export default async function Page({
 
   setRequestLocale(locale);
 
-  return <DemoPage />;
+  return <HomePage />;
 }

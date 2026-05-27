@@ -12,6 +12,30 @@ const en: typeof ru = {
     light: 'Light',
     dark: 'Dark',
   },
+  AppShell: {
+    header: {
+      eyebrow: 'Exchange rates',
+      search: 'Search',
+      alerts: 'Alerts',
+    },
+    navigation: {
+      home: 'Home',
+      rates: 'Rates',
+      convert: 'Convert',
+      settings: 'Settings',
+    },
+  },
+  Home: {
+    refresh: 'Refresh rate',
+    converterTitle: 'Quick conversion',
+    result: 'Result',
+    ratesTitle: 'Favorite currencies',
+    live: 'Live',
+    cachedRate: 'Cached exchange rate',
+    offlineTitle: 'Offline mode is ready',
+    offlineDescription:
+      'Last synced rates will remain available even without a network.',
+  },
   Demo: {
     badge: 'UI foundation',
     title: 'Currency Hub primitives',

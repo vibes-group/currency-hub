@@ -10,6 +10,30 @@ const ru = {
     light: 'Светлая',
     dark: 'Темная',
   },
+  AppShell: {
+    header: {
+      eyebrow: 'Курсы валют',
+      search: 'Поиск',
+      alerts: 'Уведомления',
+    },
+    navigation: {
+      home: 'Главная',
+      rates: 'Курсы',
+      convert: 'Обмен',
+      settings: 'Настройки',
+    },
+  },
+  Home: {
+    refresh: 'Обновить курс',
+    converterTitle: 'Быстрая конвертация',
+    result: 'Результат',
+    ratesTitle: 'Избранные валюты',
+    live: 'Live',
+    cachedRate: 'Курс из кеша',
+    offlineTitle: 'Offline режим готов',
+    offlineDescription:
+      'Последние курсы будут доступны после синхронизации даже без сети.',
+  },
   Demo: {
     badge: 'UI фундамент',
     title: 'Примитивы Currency Hub',
