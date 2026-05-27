@@ -1,8 +1,18 @@
 import { useTransition } from "react";
+
+import {
+  routing,
+  type Locale,
+  useLocale,
+  useSetLocale,
+  useTranslations,
+} from "@/i18n";
 import { LanguagesIcon } from "@/shared/icons";
 import { ToggleGroup, ToggleGroupItem } from "@/shared/ui";
 
 export function LocaleToggle() {
+  const locale = useLocale();
+  const setLocale = useSetLocale();
   const t = useTranslations("LocaleToggle");
   const [isPending, startTransition] = useTransition();
 
@@ -16,7 +26,7 @@ export function LocaleToggle() {
         }
 
         startTransition(() => {
-          router.replace(pathname, { locale: targetLocale as Locale });
+          setLocale(targetLocale as Locale);
         });
       }}
       variant="outline"

@@ -5,8 +5,7 @@ import {
   SettingsIcon,
 } from "@/shared/icons";
 
-import { useTranslations } from "@/i18n/provider";
-import { Link, usePathname } from "@/i18n/navigation";
+import { Link, usePathname, useTranslations } from "@/i18n";
 import { cn } from "@/shared/lib/utils";
 
 const navItems = [

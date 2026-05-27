@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { useLocale, useTranslations } from "@/i18n/provider";
+import { useLocale, useTranslations } from "@/i18n";
 import { getLatestRates, type FxapiRatesResponse } from "@/shared/api";
 import { RefreshCcwIcon } from "@/shared/icons";
 import { Badge, Button, Card, CardContent, Skeleton } from "@/shared/ui";

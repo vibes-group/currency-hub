@@ -1,5 +1,5 @@
 import { useTheme } from '@/app/theme-provider';
-import { useTranslations } from '@/i18n/provider';
+import { useTranslations } from '@/i18n';
 import { MoonIcon, SunIcon } from '@/shared/icons';
 import { Button } from '@/shared/ui';
 

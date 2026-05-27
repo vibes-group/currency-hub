@@ -9,8 +9,7 @@ import {
 
 import { LocaleToggle } from "@/features/change-locale";
 import { ThemeToggle } from "@/features/change-theme";
-import { useTranslations } from "@/i18n/provider";
-import { Link } from "@/i18n/navigation";
+import { Link, useTranslations } from "@/i18n";
 import {
   Badge,
   Button,

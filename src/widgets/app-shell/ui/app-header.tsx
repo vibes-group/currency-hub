@@ -1,6 +1,6 @@
 import { LocaleToggle } from "@/features/change-locale";
 import { ThemeToggle } from "@/features/change-theme";
-import { useTranslations } from "@/i18n/provider";
+import { useTranslations } from "@/i18n";
 import { BellIcon, SearchIcon } from "@/shared/icons";
 import { Button } from "@/shared/ui";
 

@@ -6,29 +6,29 @@ import {
   useMemo,
   useState,
   type ReactNode,
-} from "react";
+} from 'react';
 
-type Theme = "light" | "dark";
+type Theme = 'light' | 'dark';
 type ThemeContextValue = {
   resolvedTheme: Theme;
   setTheme: (theme: Theme) => void;
 };
 
-const storageKey = "currency-hub-theme";
+const storageKey = 'currency-hub-theme';
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 function getSystemTheme(): Theme {
-  if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-    return "dark";
+  if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    return 'dark';
   }
 
-  return "light";
+  return 'light';
 }
 
 function getInitialTheme(): Theme {
   const storedTheme = localStorage.getItem(storageKey);
 
-  if (storedTheme === "light" || storedTheme === "dark") {
+  if (storedTheme === 'light' || storedTheme === 'dark') {
     return storedTheme;
   }
 
@@ -36,7 +36,7 @@ function getInitialTheme(): Theme {
 }
 
 function applyTheme(theme: Theme) {
-  document.documentElement.classList.toggle("dark", theme === "dark");
+  document.documentElement.classList.toggle('dark', theme === 'dark');
   document.documentElement.style.colorScheme = theme;
 }
 
@@ -52,12 +52,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const media = window.matchMedia('(prefers-color-scheme: dark)');
     const listener = () => setResolvedTheme(getSystemTheme());
 
-    media.addEventListener("change", listener);
+    media.addEventListener('change', listener);
 
-    return () => media.removeEventListener("change", listener);
+    return () => media.removeEventListener('change', listener);
   }, []);
 
   const setTheme = useCallback((theme: Theme) => {
@@ -82,7 +82,7 @@ export function useTheme() {
   const context = useContext(ThemeContext);
 
   if (!context) {
-    throw new Error("useTheme must be used within ThemeProvider");
+    throw new Error('useTheme must be used within ThemeProvider');
   }
 
   return context;

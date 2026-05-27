@@ -5,7 +5,7 @@ import {
   WifiOffIcon,
 } from "@/shared/icons";
 
-import { useTranslations } from "@/i18n/provider";
+import { useTranslations } from "@/i18n";
 import { AppLayout } from "@/widgets/app-shell";
 import {
   Badge,
