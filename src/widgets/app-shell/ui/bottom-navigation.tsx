@@ -5,7 +5,7 @@ import {
   HomeIcon,
   LineChartIcon,
   SettingsIcon,
-} from "lucide-react";
+} from "@/shared/icons";
 import { useTranslations } from "next-intl";
 
 import { Link, usePathname } from "@/i18n/navigation";

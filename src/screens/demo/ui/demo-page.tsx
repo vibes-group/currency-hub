@@ -5,7 +5,7 @@ import {
   SearchIcon,
   Settings2Icon,
   WifiOffIcon,
-} from "lucide-react";
+} from "@/shared/icons";
 import { useTranslations } from "next-intl";
 
 import { LocaleToggle } from "@/features/change-locale";

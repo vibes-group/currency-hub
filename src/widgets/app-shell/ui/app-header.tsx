@@ -1,8 +1,8 @@
-import { BellIcon, SearchIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { LocaleToggle } from "@/features/change-locale";
 import { ThemeToggle } from "@/features/change-theme";
+import { BellIcon, SearchIcon } from "@/shared/icons";
 import { Button } from "@/shared/ui";
 
 export function AppHeader() {

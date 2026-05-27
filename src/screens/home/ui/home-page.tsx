@@ -3,7 +3,7 @@ import {
   CheckCircle2Icon,
   RefreshCcwIcon,
   WifiOffIcon,
-} from "lucide-react";
+} from "@/shared/icons";
 import { useTranslations } from "next-intl";
 
 import { AppLayout } from "@/widgets/app-shell";

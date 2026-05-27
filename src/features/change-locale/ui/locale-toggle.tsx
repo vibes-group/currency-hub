@@ -1,11 +1,11 @@
 "use client";
 
-import { LanguagesIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useTransition } from "react";
 
 import { routing, type Locale } from "@/i18n/routing";
 import { usePathname, useRouter } from "@/i18n/navigation";
+import { LanguagesIcon } from "@/shared/icons";
 import { ToggleGroup, ToggleGroupItem } from "@/shared/ui";
 
 export function LocaleToggle() {

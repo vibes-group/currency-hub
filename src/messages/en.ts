@@ -11,6 +11,10 @@ const en: typeof ru = {
     system: 'System',
     light: 'Light',
     dark: 'Dark',
+    switchTo: {
+      light: 'Switch to light theme',
+      dark: 'Switch to dark theme',
+    },
   },
   AppShell: {
     header: {

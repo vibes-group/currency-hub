@@ -9,6 +9,10 @@ const ru = {
     system: 'Система',
     light: 'Светлая',
     dark: 'Темная',
+    switchTo: {
+      light: 'Переключить на светлую тему',
+      dark: 'Переключить на темную тему',
+    },
   },
   AppShell: {
     header: {

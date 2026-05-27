@@ -1,40 +1,27 @@
 'use client';
 
-import { MonitorIcon, MoonIcon, SunIcon } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
-import { ToggleGroup, ToggleGroupItem } from '@/shared/ui';
+import { MoonIcon, SunIcon } from '@/shared/icons';
+import { Button } from '@/shared/ui';
 import { useTheme } from '@teispace/next-themes';
-
-const themeOptions = [
-  { value: 'system', icon: MonitorIcon },
-  { value: 'light', icon: SunIcon },
-  { value: 'dark', icon: MoonIcon },
-] as const;
 
 export function ThemeToggle() {
   const { setTheme, resolvedTheme } = useTheme();
   const t = useTranslations('ThemeToggle');
+  const isDark = resolvedTheme === 'dark';
+  const nextTheme = isDark ? 'light' : 'dark';
+  const Icon = isDark ? SunIcon : MoonIcon;
 
   return (
-    <ToggleGroup
-      type="single"
-      value={resolvedTheme}
-      onValueChange={(value) => {
-        if (value === 'system' || value === 'light' || value === 'dark') {
-          setTheme(value);
-        }
-      }}
+    <Button
+      size="icon"
       variant="outline"
-      spacing={0}
-      aria-label={t('label')}
+      aria-label={t(`switchTo.${nextTheme}`)}
+      title={t(`switchTo.${nextTheme}`)}
+      onClick={() => setTheme(nextTheme)}
     >
-      {themeOptions.map(({ value, icon: Icon }) => (
-        <ToggleGroupItem key={value} value={value} aria-label={t(value)}>
-          <Icon data-icon="inline-start" />
-          {t(value)}
-        </ToggleGroupItem>
-      ))}
-    </ToggleGroup>
+      <Icon />
+    </Button>
   );
 }
