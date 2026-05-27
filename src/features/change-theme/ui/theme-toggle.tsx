@@ -1,25 +1,22 @@
-'use client';
-
-import { useTranslations } from 'next-intl';
-
+import { useTheme } from '@/config/theme-provider';
+import { useTranslations } from '@/i18n/provider';
 import { MoonIcon, SunIcon } from '@/shared/icons';
 import { Button } from '@/shared/ui';
-import { useTheme } from '@teispace/next-themes';
 
 export function ThemeToggle() {
   const { setTheme, resolvedTheme } = useTheme();
   const t = useTranslations('ThemeToggle');
   const isDark = resolvedTheme === 'dark';
-  const nextTheme = isDark ? 'light' : 'dark';
+  const targetTheme = isDark ? 'light' : 'dark';
   const Icon = isDark ? SunIcon : MoonIcon;
 
   return (
     <Button
       size="icon"
       variant="outline"
-      aria-label={t(`switchTo.${nextTheme}`)}
-      title={t(`switchTo.${nextTheme}`)}
-      onClick={() => setTheme(nextTheme)}
+      aria-label={t(`switchTo.${targetTheme}`)}
+      title={t(`switchTo.${targetTheme}`)}
+      onClick={() => setTheme(targetTheme)}
     >
       <Icon />
     </Button>

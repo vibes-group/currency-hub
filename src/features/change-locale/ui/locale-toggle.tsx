@@ -1,8 +1,6 @@
-"use client";
-
-import { useLocale, useTranslations } from "next-intl";
 import { useTransition } from "react";
 
+import { useLocale, useTranslations } from "@/i18n/provider";
 import { routing, type Locale } from "@/i18n/routing";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { LanguagesIcon } from "@/shared/icons";
@@ -19,13 +17,13 @@ export function LocaleToggle() {
     <ToggleGroup
       type="single"
       value={locale}
-      onValueChange={(nextLocale) => {
-        if (!routing.locales.includes(nextLocale as Locale)) {
+      onValueChange={(targetLocale) => {
+        if (!routing.locales.includes(targetLocale as Locale)) {
           return;
         }
 
         startTransition(() => {
-          router.replace(pathname, { locale: nextLocale as Locale });
+          router.replace(pathname, { locale: targetLocale as Locale });
         });
       }}
       variant="outline"

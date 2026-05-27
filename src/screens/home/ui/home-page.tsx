@@ -4,8 +4,8 @@ import {
   RefreshCcwIcon,
   WifiOffIcon,
 } from "@/shared/icons";
-import { useTranslations } from "next-intl";
 
+import { useTranslations } from "@/i18n/provider";
 import { AppLayout } from "@/widgets/app-shell";
 import {
   Badge,

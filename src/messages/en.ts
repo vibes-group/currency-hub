@@ -46,6 +46,9 @@ const en: typeof ru = {
     description: 'All available values against {base}.',
     updatedAt: 'Updated: {value}',
     rateLabel: '{base} / {code}',
+    errorTitle: 'Could not load rates',
+    errorBody: 'Check the connection and retry the request.',
+    retry: 'Retry',
   },
   Demo: {
     badge: 'UI foundation',

@@ -6,10 +6,10 @@ import {
   Settings2Icon,
   WifiOffIcon,
 } from "@/shared/icons";
-import { useTranslations } from "next-intl";
 
 import { LocaleToggle } from "@/features/change-locale";
 import { ThemeToggle } from "@/features/change-theme";
+import { useTranslations } from "@/i18n/provider";
 import { Link } from "@/i18n/navigation";
 import {
   Badge,

@@ -1,13 +1,15 @@
-import { getTranslations } from "next-intl/server";
+import { useEffect, useMemo, useState } from "react";
 
-import { getLatestRates } from "@/shared/api";
-import { Badge, Card, CardContent } from "@/shared/ui";
+import { useLocale, useTranslations } from "@/i18n/provider";
+import { getLatestRates, type FxapiRatesResponse } from "@/shared/api";
+import { RefreshCcwIcon } from "@/shared/icons";
+import { Badge, Button, Card, CardContent, Skeleton } from "@/shared/ui";
 import { AppLayout } from "@/widgets/app-shell";
 
-type ListPageProps = {
-  locale: string;
-  base?: string;
-};
+type ListStatus =
+  | { state: "loading" }
+  | { state: "error"; message: string }
+  | { state: "ready"; data: FxapiRatesResponse };
 
 function formatRate(locale: string, rate: number) {
   return new Intl.NumberFormat(locale, {
@@ -15,16 +17,49 @@ function formatRate(locale: string, rate: number) {
   }).format(rate);
 }
 
-export async function ListPage({ locale, base = "USD" }: ListPageProps) {
-  const t = await getTranslations("List");
-  const data = await getLatestRates(base);
-  const rates = Object.entries(data.rates).sort(([left], [right]) =>
-    left.localeCompare(right),
-  );
-  const updatedAt = new Intl.DateTimeFormat(locale, {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(new Date(data.timestamp));
+export function ListPage() {
+  const locale = useLocale();
+  const t = useTranslations("List");
+  const [status, setStatus] = useState<ListStatus>({ state: "loading" });
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    setStatus({ state: "loading" });
+
+    getLatestRates("USD", controller.signal)
+      .then((data) => setStatus({ state: "ready", data }))
+      .catch((error: unknown) => {
+        if (controller.signal.aborted) {
+          return;
+        }
+
+        setStatus({
+          state: "error",
+          message: error instanceof Error ? error.message : t("errorBody"),
+        });
+      });
+
+    return () => controller.abort();
+  }, [t]);
+
+  const rates = useMemo(() => {
+    if (status.state !== "ready") {
+      return [];
+    }
+
+    return Object.entries(status.data.rates).sort(([left], [right]) =>
+      left.localeCompare(right),
+    );
+  }, [status]);
+
+  const updatedAt =
+    status.state === "ready"
+      ? new Intl.DateTimeFormat(locale, {
+          dateStyle: "medium",
+          timeStyle: "short",
+        }).format(new Date(status.data.timestamp))
+      : null;
 
   return (
     <AppLayout>
@@ -38,36 +73,78 @@ export async function ListPage({ locale, base = "USD" }: ListPageProps) {
               {t("title")}
             </h1>
             <p className="text-sm text-muted-foreground">
-              {t("description", { base: data.base })}
+              {t("description", {
+                base: status.state === "ready" ? status.data.base : "USD",
+              })}
             </p>
           </div>
-          <Badge variant="outline">{data.base}</Badge>
+          <Badge variant="outline">
+            {status.state === "ready" ? status.data.base : "USD"}
+          </Badge>
         </div>
-        <p className="text-xs text-muted-foreground">
-          {t("updatedAt", { value: updatedAt })}
-        </p>
+        {updatedAt ? (
+          <p className="text-xs text-muted-foreground">
+            {t("updatedAt", { value: updatedAt })}
+          </p>
+        ) : null}
       </section>
 
-      <section className="flex flex-col gap-2">
-        {rates.map(([code, rate]) => (
-          <Card key={code} className="rounded-md">
-            <CardContent className="flex items-center gap-3 p-3">
-              <div className="flex size-[var(--currency-avatar-size)] items-center justify-center rounded-full bg-accent-soft font-data text-sm font-bold text-primary">
-                {code}
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="font-data text-sm font-bold">{code}</div>
-                <div className="text-xs text-muted-foreground">
-                  {t("rateLabel", { base: data.base, code })}
+      {status.state === "loading" ? (
+        <section className="flex flex-col gap-2">
+          {Array.from({ length: 8 }).map((_, index) => (
+            <Card key={index} className="rounded-md">
+              <CardContent className="flex items-center gap-3 p-3">
+                <Skeleton className="size-[var(--currency-avatar-size)] rounded-full" />
+                <div className="flex flex-1 flex-col gap-2">
+                  <Skeleton className="h-4 w-16" />
+                  <Skeleton className="h-3 w-24" />
                 </div>
-              </div>
-              <span className="font-data text-sm font-bold">
-                {formatRate(locale, rate)}
-              </span>
-            </CardContent>
-          </Card>
-        ))}
-      </section>
+                <Skeleton className="h-4 w-20" />
+              </CardContent>
+            </Card>
+          ))}
+        </section>
+      ) : null}
+
+      {status.state === "error" ? (
+        <Card className="rounded-lg bg-surface-subtle">
+          <CardContent className="flex flex-col gap-3 p-4">
+            <div>
+              <h2 className="font-heading text-section-title font-semibold">
+                {t("errorTitle")}
+              </h2>
+              <p className="text-sm text-muted-foreground">{status.message}</p>
+            </div>
+            <Button size="sm" onClick={() => window.location.reload()}>
+              <RefreshCcwIcon data-icon="inline-start" />
+              {t("retry")}
+            </Button>
+          </CardContent>
+        </Card>
+      ) : null}
+
+      {status.state === "ready" ? (
+        <section className="flex flex-col gap-2">
+          {rates.map(([code, rate]) => (
+            <Card key={code} className="rounded-md">
+              <CardContent className="flex items-center gap-3 p-3">
+                <div className="flex size-[var(--currency-avatar-size)] items-center justify-center rounded-full bg-accent-soft font-data text-sm font-bold text-primary">
+                  {code}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="font-data text-sm font-bold">{code}</div>
+                  <div className="text-xs text-muted-foreground">
+                    {t("rateLabel", { base: status.data.base, code })}
+                  </div>
+                </div>
+                <span className="font-data text-sm font-bold">
+                  {formatRate(locale, rate)}
+                </span>
+              </CardContent>
+            </Card>
+          ))}
+        </section>
+      ) : null}
     </AppLayout>
   );
 }

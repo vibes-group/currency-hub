@@ -19,16 +19,21 @@ export const fxapiClient = new ApiClient({
   baseUrl: "https://fxapi.app/api",
 });
 
-export function getLatestRates(base = "USD") {
-  return fxapiClient.get<FxapiRatesResponse>(`/${base.toUpperCase()}.json`);
+export function getLatestRates(base = "USD", signal?: AbortSignal) {
+  return fxapiClient.get<FxapiRatesResponse>(`/${base.toUpperCase()}.json`, {
+    signal,
+  });
 }
 
-export function getPairRate(base: string, target: string) {
+export function getPairRate(base: string, target: string, signal?: AbortSignal) {
   return fxapiClient.get<FxapiPairResponse>(
     `/${base.toUpperCase()}/${target.toUpperCase()}.json`,
+    { signal },
   );
 }
 
-export function getCurrencies() {
-  return fxapiClient.get<FxapiCurrenciesResponse>("/currencies.json");
+export function getCurrencies(signal?: AbortSignal) {
+  return fxapiClient.get<FxapiCurrenciesResponse>("/currencies.json", {
+    signal,
+  });
 }

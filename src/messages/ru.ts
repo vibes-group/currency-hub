@@ -44,6 +44,9 @@ const ru = {
     description: 'Все доступные значения относительно {base}.',
     updatedAt: 'Обновлено: {value}',
     rateLabel: '{base} / {code}',
+    errorTitle: 'Не удалось загрузить курсы',
+    errorBody: 'Проверь соединение и повтори запрос.',
+    retry: 'Повторить',
   },
   Demo: {
     badge: 'UI фундамент',

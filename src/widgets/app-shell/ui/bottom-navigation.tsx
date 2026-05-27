@@ -1,13 +1,11 @@
-"use client";
-
 import {
   ArrowLeftRightIcon,
   HomeIcon,
   LineChartIcon,
   SettingsIcon,
 } from "@/shared/icons";
-import { useTranslations } from "next-intl";
 
+import { useTranslations } from "@/i18n/provider";
 import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/shared/lib/utils";
 

@@ -18,12 +18,12 @@ Primary user flows:
 
 ## Required Stack
 
-- Next.js App Router, currently `16.2.6`.
+- Vite.
+- React Router.
 - React `19.2.4`.
 - TypeScript.
 - Tailwind CSS v4.
 - shadcn/ui.
-- next-intl.
 - Feature-Sliced Design v2.1.
 - IndexedDB for offline data persistence.
 - Service worker for PWA caching.
@@ -36,24 +36,19 @@ Use `bun` as the package runner because this project has `bun.lock`.
 Before changing app code:
 
 1. Read `AGENTS.md`.
-2. Read the relevant local Next.js documentation from `node_modules/next/dist/docs/`.
-3. For App Router work, prefer files under `node_modules/next/dist/docs/01-app/`.
-4. For manifest/PWA metadata, read:
-   - `node_modules/next/dist/docs/01-app/03-api-reference/03-file-conventions/01-metadata/manifest.md`
-5. For i18n routing, read:
-   - `node_modules/next/dist/docs/01-app/02-guides/internationalization.md`
-6. For shadcn/ui work, run:
+2. For Vite, React Router, Tailwind, and shadcn changes, prefer local package docs and existing project patterns over assumptions.
+3. For shadcn/ui work, run:
    - `bunx --bun shadcn@latest info --json`
-7. Before using a shadcn component, check docs:
+4. Before using a shadcn component, check docs:
    - `bunx --bun shadcn@latest docs <component>`
 
-Do not assume Next.js APIs or file conventions from memory. This project explicitly requires checking local Next docs first.
+Do not reintroduce Next.js, Next App Router, `next-intl`, or `next/font`.
 
 ## Architecture Rules
 
-Use Feature-Sliced Design v2.1. Keep Next.js routing thin and keep application logic inside FSD layers.
+Use Feature-Sliced Design v2.1. Keep React Router route setup thin and keep application logic inside FSD layers.
 
-This project uses App Router only. Routing lives in `src/app`. Do not create a root `app/`, root `pages/`, or `src/pages/`. The FSD app layer is named `src/config`, and the FSD page layer is named `src/screens` in this repository.
+This project uses Vite + React Router. Routing lives in `src/config/app-router.tsx`. Do not create a Next `app/`, root `pages/`, or `src/pages/`. The FSD app layer is named `src/config`, and the FSD page layer is named `src/screens` in this repository.
 
 FSD layer order:
 
@@ -70,26 +65,21 @@ Import rules:
 - `shared/` has no slices; expose public APIs per segment, for example `shared/ui`, `shared/api`, `shared/lib`.
 - The deprecated FSD `processes/` layer must not be used.
 
-Next.js App Router integration:
+React Router integration:
 
-- Next route files should contain routing only and re-export FSD pages.
-- Next.js routing lives in `src/app`.
+- Router configuration lives in `src/config/app-router.tsx`.
 - FSD route-level UI lives in `src/screens`, not `src/pages`.
-- FSD app-level setup lives in `src/config`, not `src/app`.
-- Do not add a root `app/` folder.
+- FSD app-level setup lives in `src/config`.
+- Do not add a root or `src/app/` folder.
 - Do not add a root `pages/` folder.
-- Route handlers in `src/app/api/*/route.ts` should be thin re-exports from `src/config/api-routes/*` if route handlers are needed.
+- If API proxy/server behavior is needed, document the chosen runtime explicitly before adding it.
 
 Recommended target structure:
 
 ```txt
-src/app/
-  [locale]/
-    layout.tsx
-    page.tsx
-  manifest.ts
 src/
   config/
+    app-router.tsx
     providers/
       index.tsx
     styles/
@@ -262,7 +252,7 @@ First launch without network:
 
 Implement:
 
-- `src/app/manifest.ts` or `src/app/manifest.webmanifest`.
+- `public/manifest.webmanifest`.
 - App icons, including maskable icons.
 - `display: "standalone"`.
 - mobile viewport-safe layout.
@@ -335,7 +325,7 @@ For Tailwind v4, edit the global stylesheet owned by the FSD app layer: `src/con
 
 ## Internationalization
 
-Use `next-intl`.
+Use the local i18n provider in `src/i18n`.
 
 Initial locales:
 
@@ -445,8 +435,8 @@ For UI work, test at minimum:
 ## Implementation Order
 
 1. Initialize shadcn/ui and install required components.
-2. Install and configure `next-intl`.
-3. Migrate to the FSD target structure, keeping Next route files thin and using `src/screens` for route-level UI.
+2. Configure local i18n provider and locale-aware React Router routes.
+3. Keep the FSD target structure with `src/screens` for route-level UI.
 4. Add FSD path aliases in `tsconfig.json`.
 5. Define theme tokens in `src/config/styles/globals.css`.
 6. Add locale routing and message files.
