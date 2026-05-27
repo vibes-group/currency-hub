@@ -38,6 +38,13 @@ const ru = {
     offlineDescription:
       'Последние курсы будут доступны после синхронизации даже без сети.',
   },
+  List: {
+    badge: 'fxapi.app',
+    title: 'Все курсы',
+    description: 'Все доступные значения относительно {base}.',
+    updatedAt: 'Обновлено: {value}',
+    rateLabel: '{base} / {code}',
+  },
   Demo: {
     badge: 'UI фундамент',
     title: 'Примитивы Currency Hub',

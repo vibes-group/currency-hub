@@ -40,6 +40,13 @@ const en: typeof ru = {
     offlineDescription:
       'Last synced rates will remain available even without a network.',
   },
+  List: {
+    badge: 'fxapi.app',
+    title: 'All rates',
+    description: 'All available values against {base}.',
+    updatedAt: 'Updated: {value}',
+    rateLabel: '{base} / {code}',
+  },
   Demo: {
     badge: 'UI foundation',
     title: 'Currency Hub primitives',

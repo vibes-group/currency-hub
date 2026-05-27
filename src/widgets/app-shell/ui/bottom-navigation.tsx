@@ -13,7 +13,7 @@ import { cn } from "@/shared/lib/utils";
 
 const navItems = [
   { href: "/", labelKey: "home", icon: HomeIcon },
-  { href: "/#rates", labelKey: "rates", icon: LineChartIcon },
+  { href: "/list", labelKey: "rates", icon: LineChartIcon },
   { href: "/#convert", labelKey: "convert", icon: ArrowLeftRightIcon },
   { href: "/#settings", labelKey: "settings", icon: SettingsIcon },
 ] as const;
@@ -26,7 +26,8 @@ export function BottomNavigation() {
     <nav className="fixed inset-x-0 bottom-0 z-40 border-t bg-background/92 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur-xl">
       <div className="mx-auto grid h-[var(--bottom-nav-pill-height)] w-full max-w-xl grid-cols-4 rounded-full border bg-card p-1 shadow-[var(--shadow-floating)]">
         {navItems.map(({ href, labelKey, icon: Icon }) => {
-          const isActive = pathname === "/" && labelKey === "home";
+          const isActive =
+            pathname === href || (pathname === "/" && labelKey === "home");
 
           return (
             <Link
