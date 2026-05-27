@@ -1,0 +1,76 @@
+const ru = {
+  LocaleToggle: {
+    label: 'Язык',
+    ru: 'Русский',
+    en: 'Английский',
+  },
+  ThemeToggle: {
+    label: 'Тема',
+    system: 'Система',
+    light: 'Светлая',
+    dark: 'Темная',
+  },
+  Demo: {
+    badge: 'UI фундамент',
+    title: 'Примитивы Currency Hub',
+    description:
+      'Tailwind токены и shadcn примитивы, адаптированные под мобильный валютный интерфейс.',
+    mobilePreviewButton: 'Мобильный preview',
+    tokensTitle: 'Токены',
+    tokensDescription:
+      'Базовые CSS variables, доступные как Tailwind v4 theme tokens.',
+    buttonsTitle: 'Кнопки',
+    controlsTitle: 'Контролы',
+    searchPlaceholder: 'Поиск валюты или кода',
+    button: {
+      primary: 'Основная',
+      secondary: 'Вторичная',
+      outline: 'Контур',
+      ghost: 'Ghost',
+      destructive: 'Опасная',
+      extraSmall: 'Очень малая',
+      small: 'Малая',
+      default: 'Обычная',
+      large: 'Большая',
+      disabled: 'Disabled',
+    },
+    tokens: {
+      background: 'Фон',
+      card: 'Карточка',
+      primary: 'Основной',
+      accentSoft: 'Мягкий акцент',
+      muted: 'Приглушенный',
+      border: 'Граница',
+      warning: 'Предупреждение',
+      danger: 'Опасность',
+    },
+    cards: {
+      rateTitle: 'Карточка курса',
+      rateDescription: 'Компактная финансовая метрика',
+      live: 'Live',
+      updated: 'Обновлено 18 сек назад',
+      offlineTitle: 'Offline состояние',
+      offlineDescription: 'Fallback из кеша',
+      stale: 'Устарело',
+      indexedDb: 'IndexedDB',
+      offlineBody:
+        'Последние закешированные курсы остаются доступными без сети.',
+      retrySync: 'Повторить sync',
+      loadingTitle: 'Loading состояние',
+      loadingDescription: 'Skeleton примитивы',
+      pending: 'Ожидание',
+    },
+    preview: {
+      mobileTitle: 'Мобильный preview',
+      darkTitle: 'Темный preview',
+      subtitle: 'Мобильная PWA основа',
+      amount: 'Сумма',
+      settings: 'Настройки',
+      refreshRate: 'Обновить курс',
+      cachedRate: 'Курс из кеша',
+      target: 'Target',
+    },
+  },
+};
+
+export default ru;

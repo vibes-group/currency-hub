@@ -6,9 +6,11 @@ import {
   Settings2Icon,
   WifiOffIcon,
 } from "lucide-react";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
 
+import { LocaleToggle } from "@/features/change-locale";
 import { ThemeToggle } from "@/features/change-theme";
+import { Link } from "@/i18n/navigation";
 import {
   Badge,
   Button,
@@ -24,29 +26,31 @@ import {
   Skeleton,
 } from "@/shared/ui";
 
-const tokens = [
-  ["Background", "var(--background)"],
-  ["Card", "var(--card)"],
-  ["Primary", "var(--primary)"],
-  ["Accent soft", "var(--accent-soft)"],
-  ["Muted", "var(--muted)"],
-  ["Border", "var(--border)"],
-  ["Warning", "var(--warning)"],
-  ["Danger", "var(--danger)"],
+const tokenRows = [
+  ["tokens.background", "var(--background)"],
+  ["tokens.card", "var(--card)"],
+  ["tokens.primary", "var(--primary)"],
+  ["tokens.accentSoft", "var(--accent-soft)"],
+  ["tokens.muted", "var(--muted)"],
+  ["tokens.border", "var(--border)"],
+  ["tokens.warning", "var(--warning)"],
+  ["tokens.danger", "var(--danger)"],
 ] as const;
 
 const rateCards = [
-  ["USD", "1.0000", "Target", "default"],
+  ["USD", "1.0000", "target", "default"],
   ["EUR", "0.9231", "+0.18%", "secondary"],
   ["GBP", "0.7864", "-0.12%", "destructive"],
 ] as const;
 
 function TokenSwatches() {
+  const t = useTranslations("Demo");
+
   return (
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-      {tokens.map(([label, value]) => (
+      {tokenRows.map(([labelKey, value]) => (
         <div
-          key={label}
+          key={labelKey}
           className="flex items-center gap-3 rounded-lg border bg-card p-3"
         >
           <span
@@ -54,7 +58,7 @@ function TokenSwatches() {
             style={{ backgroundColor: value }}
           />
           <div className="flex min-w-0 flex-col">
-            <span className="text-sm font-medium">{label}</span>
+            <span className="text-sm font-medium">{t(labelKey)}</span>
             <span className="truncate font-mono text-xs text-muted-foreground">
               {value}
             </span>
@@ -66,6 +70,8 @@ function TokenSwatches() {
 }
 
 function MobilePreview() {
+  const t = useTranslations("Demo.preview");
+
   return (
     <div className="mx-auto flex w-full max-w-[390px] flex-col gap-4 rounded-[2rem] border bg-background p-4 shadow-sm">
       <div className="flex items-center justify-between">
@@ -74,10 +80,10 @@ function MobilePreview() {
             Currency Hub
           </span>
           <span className="text-sm text-muted-foreground">
-            Mobile PWA foundation
+            {t("subtitle")}
           </span>
         </div>
-        <Button size="icon" variant="outline" aria-label="Settings">
+        <Button size="icon" variant="outline" aria-label={t("settings")}>
           <Settings2Icon />
         </Button>
       </div>
@@ -85,7 +91,7 @@ function MobilePreview() {
       <div className="flex flex-col gap-4 rounded-3xl bg-surface-inverse p-5 text-white shadow-sm dark:text-text-primary">
         <div className="flex items-center justify-between">
           <span className="text-xs font-semibold text-white/60 dark:text-text-secondary">
-            Amount
+            {t("amount")}
           </span>
           <Badge variant="secondary">EUR</Badge>
         </div>
@@ -96,7 +102,7 @@ function MobilePreview() {
           <span className="text-sm text-white/60 dark:text-text-secondary">
             1 EUR = 1.0834 USD
           </span>
-          <Button size="icon" aria-label="Refresh rate">
+          <Button size="icon" aria-label={t("refreshRate")}>
             <RefreshCcwIcon />
           </Button>
         </div>
@@ -126,12 +132,14 @@ function MobilePreview() {
             <div className="flex min-w-0 flex-1 flex-col">
               <span className="font-mono text-sm font-bold">{code}</span>
               <span className="text-xs text-muted-foreground">
-                Cached exchange rate
+                {t("cachedRate")}
               </span>
             </div>
             <div className="flex flex-col items-end gap-1">
               <span className="font-mono text-sm font-bold">{value}</span>
-              <Badge variant={variant}>{meta}</Badge>
+              <Badge variant={variant}>
+                {meta === "target" ? t("target") : meta}
+              </Badge>
             </div>
           </div>
         ))}
@@ -141,35 +149,41 @@ function MobilePreview() {
 }
 
 export function DemoPage() {
+  const t = useTranslations("Demo");
+
   return (
     <main className="min-h-screen bg-background text-foreground">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 py-8 sm:px-6 lg:px-8">
         <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div className="flex flex-col gap-2">
             <Badge className="w-fit" variant="secondary">
-              UI foundation
+              {t("badge")}
             </Badge>
             <h1 className="font-heading text-4xl font-bold tracking-normal">
-              Currency Hub primitives
+              {t("title")}
             </h1>
             <p className="max-w-2xl text-muted-foreground">
-              Tailwind tokens and shadcn primitives adapted to the mobile
-              currency design language.
+              {t("description")}
             </p>
           </div>
-          <Button asChild>
-            <Link href="/demo#mobile-preview">
-              Mobile preview
-              <ArrowRightIcon data-icon="inline-end" />
-            </Link>
-          </Button>
+          <div className="flex flex-wrap items-center gap-2">
+            <LocaleToggle />
+            <Button asChild>
+              <Link href="/demo#mobile-preview">
+                {t("mobilePreviewButton")}
+                <ArrowRightIcon data-icon="inline-end" />
+              </Link>
+            </Button>
+          </div>
         </header>
 
         <section className="flex flex-col gap-4">
           <div className="flex flex-col gap-1">
-            <h2 className="font-heading text-2xl font-semibold">Tokens</h2>
+            <h2 className="font-heading text-2xl font-semibold">
+              {t("tokensTitle")}
+            </h2>
             <p className="text-sm text-muted-foreground">
-              Core CSS variables exposed as Tailwind v4 theme tokens.
+              {t("tokensDescription")}
             </p>
           </div>
           <TokenSwatches />
@@ -177,32 +191,36 @@ export function DemoPage() {
 
         <section className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="flex flex-col gap-4">
-            <h2 className="font-heading text-2xl font-semibold">Buttons</h2>
+            <h2 className="font-heading text-2xl font-semibold">
+              {t("buttonsTitle")}
+            </h2>
             <div className="flex flex-wrap items-center gap-3">
-              <Button>Primary</Button>
-              <Button variant="secondary">Secondary</Button>
-              <Button variant="outline">Outline</Button>
-              <Button variant="ghost">Ghost</Button>
-              <Button variant="destructive">Destructive</Button>
+              <Button>{t("button.primary")}</Button>
+              <Button variant="secondary">{t("button.secondary")}</Button>
+              <Button variant="outline">{t("button.outline")}</Button>
+              <Button variant="ghost">{t("button.ghost")}</Button>
+              <Button variant="destructive">{t("button.destructive")}</Button>
               <Button size="icon" aria-label="Search">
                 <SearchIcon />
               </Button>
             </div>
             <div className="flex flex-wrap items-center gap-3">
-              <Button size="xs">Extra small</Button>
-              <Button size="sm">Small</Button>
-              <Button>Default</Button>
-              <Button size="lg">Large</Button>
-              <Button disabled>Disabled</Button>
+              <Button size="xs">{t("button.extraSmall")}</Button>
+              <Button size="sm">{t("button.small")}</Button>
+              <Button>{t("button.default")}</Button>
+              <Button size="lg">{t("button.large")}</Button>
+              <Button disabled>{t("button.disabled")}</Button>
             </div>
           </div>
 
           <div className="flex flex-col gap-4">
-            <h2 className="font-heading text-2xl font-semibold">Controls</h2>
+            <h2 className="font-heading text-2xl font-semibold">
+              {t("controlsTitle")}
+            </h2>
             <div className="flex flex-col gap-3">
               <div className="relative">
                 <SearchIcon className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                <Input className="pl-9" placeholder="Search currency or code" />
+                <Input className="pl-9" placeholder={t("searchPlaceholder")} />
               </div>
               <ThemeToggle />
             </div>
@@ -214,12 +232,12 @@ export function DemoPage() {
         <section className="grid gap-4 md:grid-cols-3">
           <Card>
             <CardHeader>
-              <CardTitle>Rate card</CardTitle>
-              <CardDescription>Compact financial metric</CardDescription>
+              <CardTitle>{t("cards.rateTitle")}</CardTitle>
+              <CardDescription>{t("cards.rateDescription")}</CardDescription>
               <CardAction>
                 <Badge>
                   <CheckIcon data-icon="inline-start" />
-                  Live
+                  {t("cards.live")}
                 </Badge>
               </CardAction>
             </CardHeader>
@@ -236,40 +254,44 @@ export function DemoPage() {
             </CardContent>
             <CardFooter>
               <span className="text-sm text-muted-foreground">
-                Updated 18 sec ago
+                {t("cards.updated")}
               </span>
             </CardFooter>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle>Offline state</CardTitle>
-              <CardDescription>Cached data fallback</CardDescription>
+              <CardTitle>{t("cards.offlineTitle")}</CardTitle>
+              <CardDescription>
+                {t("cards.offlineDescription")}
+              </CardDescription>
               <CardAction>
                 <WifiOffIcon className="text-muted-foreground" />
               </CardAction>
             </CardHeader>
             <CardContent className="flex flex-col gap-3">
               <div className="flex items-center gap-2">
-                <Badge variant="outline">Stale</Badge>
-                <Badge variant="secondary">IndexedDB</Badge>
+                <Badge variant="outline">{t("cards.stale")}</Badge>
+                <Badge variant="secondary">{t("cards.indexedDb")}</Badge>
               </div>
               <p className="text-sm text-muted-foreground">
-                Last cached rates remain readable when the device is offline.
+                {t("cards.offlineBody")}
               </p>
             </CardContent>
             <CardFooter>
               <Button size="sm" variant="outline">
                 <RefreshCcwIcon data-icon="inline-start" />
-                Retry sync
+                {t("cards.retrySync")}
               </Button>
             </CardFooter>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle>Loading state</CardTitle>
-              <CardDescription>Skeleton primitives</CardDescription>
+              <CardTitle>{t("cards.loadingTitle")}</CardTitle>
+              <CardDescription>
+                {t("cards.loadingDescription")}
+              </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col gap-3">
               <Skeleton className="h-7 w-28" />
@@ -281,7 +303,7 @@ export function DemoPage() {
               </div>
             </CardContent>
             <CardFooter>
-              <Badge variant="outline">Pending</Badge>
+              <Badge variant="outline">{t("cards.pending")}</Badge>
             </CardFooter>
           </Card>
         </section>
@@ -292,14 +314,14 @@ export function DemoPage() {
         >
           <div className="flex flex-col gap-4">
             <h2 className="font-heading text-2xl font-semibold">
-              Mobile preview
+              {t("preview.mobileTitle")}
             </h2>
             <MobilePreview />
           </div>
 
           <div className="dark flex flex-col gap-4 rounded-3xl bg-background p-4 text-foreground">
             <h2 className="font-heading text-2xl font-semibold">
-              Dark preview
+              {t("preview.darkTitle")}
             </h2>
             <MobilePreview />
           </div>
