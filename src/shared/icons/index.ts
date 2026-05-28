@@ -7,6 +7,7 @@ export {
   FiRefreshCcw as RefreshCcwIcon,
   FiSearch as SearchIcon,
   FiSettings as SettingsIcon,
+  FiStar as StarIcon,
   FiSun as SunIcon,
   FiWifi as WifiIcon,
   FiWifiOff as WifiOffIcon,

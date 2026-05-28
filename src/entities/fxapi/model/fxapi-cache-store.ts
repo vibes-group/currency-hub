@@ -16,10 +16,15 @@ export type FxapiLatestRatesCacheRecord = {
 type FxapiCacheState = {
   isHydrated: boolean;
   latestRatesByBase: Record<FxapiCurrencyCode, FxapiLatestRatesCacheRecord>;
+  favoriteCurrencyCodes: FxapiCurrencyCode[];
+  targetCurrencyCode: FxapiCurrencyCode | null;
   cacheLatestRates: (data: FxapiLatestRatesResponse) => void;
   getCachedLatestRates: (
     base: FxapiCurrencyCode,
   ) => FxapiLatestRatesCacheRecord | undefined;
+  isFavoriteCurrency: (code: FxapiCurrencyCode) => boolean;
+  toggleFavoriteCurrency: (code: FxapiCurrencyCode) => void;
+  setTargetCurrency: (code: FxapiCurrencyCode) => void;
   setHydrated: (isHydrated: boolean) => void;
 };
 
@@ -32,6 +37,8 @@ export const useFxapiCacheStore = create<FxapiCacheState>()(
     (set, get) => ({
       isHydrated: false,
       latestRatesByBase: {},
+      favoriteCurrencyCodes: [],
+      targetCurrencyCode: null,
       cacheLatestRates: (data) => {
         const base = normalizeCurrencyCode(data.base);
 
@@ -50,6 +57,26 @@ export const useFxapiCacheStore = create<FxapiCacheState>()(
       },
       getCachedLatestRates: (base) =>
         get().latestRatesByBase[normalizeCurrencyCode(base)],
+      isFavoriteCurrency: (code) =>
+        get().favoriteCurrencyCodes.includes(normalizeCurrencyCode(code)),
+      toggleFavoriteCurrency: (code) => {
+        const normalizedCode = normalizeCurrencyCode(code);
+
+        set((state) => {
+          const isFavorite =
+            state.favoriteCurrencyCodes.includes(normalizedCode);
+
+          return {
+            favoriteCurrencyCodes: isFavorite
+              ? state.favoriteCurrencyCodes.filter(
+                  (currencyCode) => currencyCode !== normalizedCode,
+                )
+              : [...state.favoriteCurrencyCodes, normalizedCode].sort(),
+          };
+        });
+      },
+      setTargetCurrency: (code) =>
+        set({ targetCurrencyCode: normalizeCurrencyCode(code) }),
       setHydrated: (isHydrated) => set({ isHydrated }),
     }),
     {
@@ -57,6 +84,8 @@ export const useFxapiCacheStore = create<FxapiCacheState>()(
       storage: createJSONStorage(() => indexedDbStorage),
       partialize: (state) => ({
         latestRatesByBase: state.latestRatesByBase,
+        favoriteCurrencyCodes: state.favoriteCurrencyCodes,
+        targetCurrencyCode: state.targetCurrencyCode,
       }),
       onRehydrateStorage: () => (state) => {
         state?.setHydrated(true);

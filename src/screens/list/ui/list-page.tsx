@@ -23,6 +23,7 @@ export function ListPage() {
   const t = useTranslations('List');
   const [status, setStatus] = useState<ListStatus>({ state: 'loading' });
   const isCacheHydrated = useFxapiCacheStore((state) => state.isHydrated);
+
   const cacheLatestRates = useFxapiCacheStore(
     (state) => state.cacheLatestRates,
   );
@@ -124,7 +125,7 @@ export function ListPage() {
           {Array.from({ length: 8 }).map((_, index) => (
             <Card key={index} className="rounded-md">
               <CardContent className="flex items-center gap-3 p-3">
-                <Skeleton className="size-[var(--currency-avatar-size)] rounded-full" />
+                <Skeleton className="size-(--currency-avatar-size) rounded-full" />
                 <div className="flex flex-1 flex-col gap-2">
                   <Skeleton className="h-4 w-16" />
                   <Skeleton className="h-3 w-24" />

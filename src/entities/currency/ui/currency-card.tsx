@@ -1,7 +1,10 @@
-import { Badge, Card, CardContent } from '@/shared/ui';
+import { StarIcon } from '@/shared/icons';
+import { cn } from '@/shared/lib';
+import { Badge, Button, Card, CardContent } from '@/shared/ui';
 
 import { getCurrencyTrend, type CurrencyTrend } from '../model/currency';
 import { useLocale } from '@/i18n';
+import { useFxapiCacheStore } from '@/entities/fxapi';
 
 type CurrencyCardProps = {
   code: string;
@@ -41,9 +44,27 @@ export function CurrencyCard({
   const resolvedTrend = trend ?? getCurrencyTrend(trendLabel);
   const rateLabel = typeof rate === 'number' ? formatRate(locale, rate) : rate;
 
+  const toggleFavoriteCurrency = useFxapiCacheStore(
+    (state) => state.toggleFavoriteCurrency,
+  );
+  const setTargetCurrency = useFxapiCacheStore(
+    (state) => state.setTargetCurrency,
+  );
+  const isFavorite = useFxapiCacheStore((state) =>
+    state.favoriteCurrencyCodes.includes(code),
+  );
+  const isTarget = useFxapiCacheStore(
+    (state) => state.targetCurrencyCode === code,
+  );
+
   return (
-    <Card className="rounded-md">
-      <CardContent className="flex items-center gap-3 p-3">
+    <Card
+      className={cn(
+        'rounded-md',
+        isTarget && 'border-primary bg-accent-soft/70',
+      )}
+    >
+      <CardContent className="flex items-center gap-3">
         <div className="flex size-(--currency-avatar-size) items-center justify-center rounded-full bg-accent-soft font-data text-sm font-bold text-primary">
           {code}
         </div>
@@ -62,6 +83,24 @@ export function CurrencyCard({
           {trendLabel ? (
             <Badge variant={getTrendVariant(resolvedTrend)}>{trendLabel}</Badge>
           ) : null}
+        </div>
+
+        <div className="flex items-center gap-1">
+          <Button
+            size="icon"
+            variant={'ghost'}
+            onClick={() => toggleFavoriteCurrency(code)}
+          >
+            <StarIcon
+              className={cn(isFavorite && 'fill-current text-primary')}
+            />
+          </Button>
+          <Button
+            variant={isTarget ? 'default' : 'ghost'}
+            onClick={() => setTargetCurrency(code)}
+          >
+            TARGET
+          </Button>
         </div>
       </CardContent>
     </Card>
