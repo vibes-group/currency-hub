@@ -1,6 +1,7 @@
 import { Badge, Card, CardContent } from '@/shared/ui';
 
 import { getCurrencyTrend, type CurrencyTrend } from '../model/currency';
+import { useLocale } from '@/i18n';
 
 type CurrencyCardProps = {
   code: string;
@@ -8,7 +9,6 @@ type CurrencyCardProps = {
   rate?: number | string;
   trendLabel?: string;
   trend?: CurrencyTrend;
-  formatter?: (value: number) => string;
 };
 
 function getTrendVariant(trend: CurrencyTrend) {
@@ -23,17 +23,23 @@ function getTrendVariant(trend: CurrencyTrend) {
   return 'outline';
 }
 
+function formatRate(locale: string, rate: number) {
+  return new Intl.NumberFormat(locale, {
+    maximumFractionDigits: 6,
+  }).format(rate);
+}
+
 export function CurrencyCard({
   code,
   description,
   rate,
   trend,
   trendLabel,
-  formatter,
 }: CurrencyCardProps) {
+  const locale = useLocale();
+
   const resolvedTrend = trend ?? getCurrencyTrend(trendLabel);
-  const rateLabel =
-    typeof rate === 'number' && formatter ? formatter(rate) : rate;
+  const rateLabel = typeof rate === 'number' ? formatRate(locale, rate) : rate;
 
   return (
     <Card className="rounded-md">

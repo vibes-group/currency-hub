@@ -1,35 +1,31 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from 'react';
 
-import { CurrencyCard } from "@/entities/currency";
+import { CurrencyCard } from '@/entities/currency';
 import {
   fxapiService,
   useFxapiCacheStore,
   type FxapiLatestRatesResponse,
-} from "@/entities/fxapi";
-import { useLocale, useTranslations } from "@/i18n";
-import { RefreshCcwIcon } from "@/shared/icons";
-import { Badge, Button, Card, CardContent, Skeleton } from "@/shared/ui";
-import { AppLayout } from "@/widgets/app-shell";
+} from '@/entities/fxapi';
+import { useLocale, useTranslations } from '@/i18n';
+import { RefreshCcwIcon } from '@/shared/icons';
+import { Badge, Button, Card, CardContent, Skeleton } from '@/shared/ui';
+import { AppLayout } from '@/widgets/app-shell';
 
-const BASE_CURRENCY = "USD";
+const BASE_CURRENCY = 'USD';
 
 type ListStatus =
-  | { state: "loading" }
-  | { state: "error"; message: string }
-  | { state: "ready"; data: FxapiLatestRatesResponse };
-
-function formatRate(locale: string, rate: number) {
-  return new Intl.NumberFormat(locale, {
-    maximumFractionDigits: 6,
-  }).format(rate);
-}
+  | { state: 'loading' }
+  | { state: 'error'; message: string }
+  | { state: 'ready'; data: FxapiLatestRatesResponse };
 
 export function ListPage() {
   const locale = useLocale();
-  const t = useTranslations("List");
-  const [status, setStatus] = useState<ListStatus>({ state: "loading" });
+  const t = useTranslations('List');
+  const [status, setStatus] = useState<ListStatus>({ state: 'loading' });
   const isCacheHydrated = useFxapiCacheStore((state) => state.isHydrated);
-  const cacheLatestRates = useFxapiCacheStore((state) => state.cacheLatestRates);
+  const cacheLatestRates = useFxapiCacheStore(
+    (state) => state.cacheLatestRates,
+  );
 
   useEffect(() => {
     if (!isCacheHydrated) {
@@ -37,37 +33,39 @@ export function ListPage() {
     }
 
     const controller = new AbortController();
-    const cachedRates =
-      useFxapiCacheStore.getState().getCachedLatestRates(BASE_CURRENCY);
+    const cachedRates = useFxapiCacheStore
+      .getState()
+      .getCachedLatestRates(BASE_CURRENCY);
 
     if (cachedRates) {
-      setStatus({ state: "ready", data: cachedRates.data });
+      setStatus({ state: 'ready', data: cachedRates.data });
     } else {
-      setStatus({ state: "loading" });
+      setStatus({ state: 'loading' });
     }
 
     fxapiService
       .getLatestRates(BASE_CURRENCY, { signal: controller.signal })
       .then((data) => {
         cacheLatestRates(data);
-        setStatus({ state: "ready", data });
+        setStatus({ state: 'ready', data });
       })
       .catch((error: unknown) => {
         if (controller.signal.aborted) {
           return;
         }
 
-        const fallbackRates =
-          useFxapiCacheStore.getState().getCachedLatestRates(BASE_CURRENCY);
+        const fallbackRates = useFxapiCacheStore
+          .getState()
+          .getCachedLatestRates(BASE_CURRENCY);
 
         if (fallbackRates) {
-          setStatus({ state: "ready", data: fallbackRates.data });
+          setStatus({ state: 'ready', data: fallbackRates.data });
           return;
         }
 
         setStatus({
-          state: "error",
-          message: error instanceof Error ? error.message : t("errorBody"),
+          state: 'error',
+          message: error instanceof Error ? error.message : t('errorBody'),
         });
       });
 
@@ -75,7 +73,7 @@ export function ListPage() {
   }, [cacheLatestRates, isCacheHydrated, t]);
 
   const rates = useMemo(() => {
-    if (status.state !== "ready") {
+    if (status.state !== 'ready') {
       return [];
     }
 
@@ -85,10 +83,10 @@ export function ListPage() {
   }, [status]);
 
   const updatedAt =
-    status.state === "ready"
+    status.state === 'ready'
       ? new Intl.DateTimeFormat(locale, {
-          dateStyle: "medium",
-          timeStyle: "short",
+          dateStyle: 'medium',
+          timeStyle: 'short',
         }).format(new Date(status.data.timestamp))
       : null;
 
@@ -96,32 +94,32 @@ export function ListPage() {
     <AppLayout>
       <section className="flex flex-col gap-2">
         <Badge className="w-fit" variant="secondary">
-          {t("badge")}
+          {t('badge')}
         </Badge>
         <div className="flex items-end justify-between gap-3">
           <div className="min-w-0">
             <h1 className="font-heading text-title font-bold leading-ui">
-              {t("title")}
+              {t('title')}
             </h1>
             <p className="text-sm text-muted-foreground">
-              {t("description", {
+              {t('description', {
                 base:
-                  status.state === "ready" ? status.data.base : BASE_CURRENCY,
+                  status.state === 'ready' ? status.data.base : BASE_CURRENCY,
               })}
             </p>
           </div>
           <Badge variant="outline">
-            {status.state === "ready" ? status.data.base : BASE_CURRENCY}
+            {status.state === 'ready' ? status.data.base : BASE_CURRENCY}
           </Badge>
         </div>
         {updatedAt ? (
           <p className="text-xs text-muted-foreground">
-            {t("updatedAt", { value: updatedAt })}
+            {t('updatedAt', { value: updatedAt })}
           </p>
         ) : null}
       </section>
 
-      {status.state === "loading" ? (
+      {status.state === 'loading' ? (
         <section className="flex flex-col gap-2">
           {Array.from({ length: 8 }).map((_, index) => (
             <Card key={index} className="rounded-md">
@@ -138,32 +136,31 @@ export function ListPage() {
         </section>
       ) : null}
 
-      {status.state === "error" ? (
+      {status.state === 'error' ? (
         <Card className="rounded-lg bg-surface-subtle">
           <CardContent className="flex flex-col gap-3 p-4">
             <div>
               <h2 className="font-heading text-section-title font-semibold">
-                {t("errorTitle")}
+                {t('errorTitle')}
               </h2>
               <p className="text-sm text-muted-foreground">{status.message}</p>
             </div>
             <Button size="sm" onClick={() => window.location.reload()}>
               <RefreshCcwIcon data-icon="inline-start" />
-              {t("retry")}
+              {t('retry')}
             </Button>
           </CardContent>
         </Card>
       ) : null}
 
-      {status.state === "ready" ? (
+      {status.state === 'ready' ? (
         <section className="flex flex-col gap-2">
           {rates.map(([code, rate]) => (
             <CurrencyCard
               key={code}
               code={code}
-              description={t("rateLabel", { base: status.data.base, code })}
+              description={t('rateLabel', { base: status.data.base, code })}
               rate={rate}
-              formatter={(value) => formatRate(locale, value)}
             />
           ))}
         </section>
