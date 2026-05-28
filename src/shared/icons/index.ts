@@ -8,6 +8,7 @@ export {
   FiSearch as SearchIcon,
   FiSettings as SettingsIcon,
   FiSun as SunIcon,
+  FiWifi as WifiIcon,
   FiWifiOff as WifiOffIcon,
   FiGlobe as GlobIcon,
 } from 'react-icons/fi';

@@ -3,11 +3,11 @@ import {
   CheckCircle2Icon,
   RefreshCcwIcon,
   WifiOffIcon,
-} from "@/shared/icons";
+} from '@/shared/icons';
 
-import { CurrencyCard, getCurrencyTrend } from "@/entities/currency";
-import { useTranslations } from "@/i18n";
-import { AppLayout } from "@/widgets/app-shell";
+import { CurrencyCard, getCurrencyTrend } from '@/entities/currency';
+import { useTranslations } from '@/i18n';
+import { AppLayout } from '@/widgets/app-shell';
 import {
   Badge,
   Button,
@@ -15,16 +15,16 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-} from "@/shared/ui";
+} from '@/shared/ui';
 
 const currencies = [
-  ["USD", "1.0000", "+0.24%"],
-  ["EUR", "0.9228", "-0.08%"],
-  ["GBP", "0.7859", "+0.11%"],
+  ['USD', '1.0000', '+0.24%'],
+  ['EUR', '0.9228', '-0.08%'],
+  ['GBP', '0.7859', '+0.11%'],
 ] as const;
 
 export function HomePage() {
-  const t = useTranslations("Home");
+  const t = useTranslations('Home');
 
   return (
     <AppLayout>
@@ -33,12 +33,12 @@ export function HomePage() {
           <CardHeader className="gap-2">
             <div className="flex items-center justify-between gap-3">
               <Badge variant="secondary">EUR</Badge>
-              <Button size="icon" aria-label={t("refresh")}>
+              <Button size="icon" aria-label={t('refresh')}>
                 <RefreshCcwIcon />
               </Button>
             </div>
             <CardTitle className="font-heading text-section-title">
-              {t("converterTitle")}
+              {t('converterTitle')}
             </CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
@@ -48,7 +48,7 @@ export function HomePage() {
             <div className="flex items-center justify-between gap-3 rounded-2xl bg-white/10 p-3">
               <div className="flex min-w-0 flex-col">
                 <span className="text-xs text-white/60 dark:text-text-secondary">
-                  {t("result")}
+                  {t('result')}
                 </span>
                 <span className="font-data text-result font-bold">
                   1 083.40 USD
@@ -63,11 +63,11 @@ export function HomePage() {
       <section id="rates" className="flex flex-col gap-3">
         <div className="flex items-center justify-between gap-3">
           <h2 className="font-heading text-section-title font-semibold">
-            {t("ratesTitle")}
+            {t('ratesTitle')}
           </h2>
           <Badge variant="outline">
             <CheckCircle2Icon data-icon="inline-start" />
-            {t("live")}
+            {t('live')}
           </Badge>
         </div>
 
@@ -76,7 +76,7 @@ export function HomePage() {
             <CurrencyCard
               key={code}
               code={code}
-              description={t("cachedRate")}
+              description={t('cachedRate')}
               rate={value}
               trend={getCurrencyTrend(trend)}
               trendLabel={trend}
@@ -93,10 +93,10 @@ export function HomePage() {
             </div>
             <div className="min-w-0 flex-1">
               <h2 className="font-heading text-section-title font-semibold">
-                {t("offlineTitle")}
+                {t('offlineTitle')}
               </h2>
               <p className="text-sm text-muted-foreground">
-                {t("offlineDescription")}
+                {t('offlineDescription')}
               </p>
             </div>
           </CardContent>

@@ -33,7 +33,7 @@ export function BottomNavigation() {
               key={labelKey}
               href={href}
               className={cn(
-                'flex min-w-0 flex-col items-center justify-center gap-1 rounded-full px-1 text-[var(--font-size-tab)] font-semibold uppercase tracking-normal text-muted-foreground transition-colors ',
+                'flex min-w-0 flex-col items-center justify-center gap-1 rounded-full px-1  font-semibold uppercase tracking-normal text-muted-foreground transition-colors ',
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
                 isActive && 'bg-primary text-primary-foreground shadow-sm',
               )}
