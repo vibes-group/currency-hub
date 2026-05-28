@@ -21,9 +21,8 @@ const ru = {
       alerts: 'Уведомления',
     },
     navigation: {
-      home: 'Главная',
-      rates: 'Курсы',
-      convert: 'Обмен',
+      convert: 'Конв',
+      list: 'Список',
       settings: 'Настройки',
     },
   },

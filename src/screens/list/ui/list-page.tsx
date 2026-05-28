@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
+import { CurrencyCard } from "@/entities/currency";
 import { useLocale, useTranslations } from "@/i18n";
 import { getLatestRates, type FxapiRatesResponse } from "@/shared/api";
 import { RefreshCcwIcon } from "@/shared/icons";
@@ -126,22 +127,13 @@ export function ListPage() {
       {status.state === "ready" ? (
         <section className="flex flex-col gap-2">
           {rates.map(([code, rate]) => (
-            <Card key={code} className="rounded-md">
-              <CardContent className="flex items-center gap-3 p-3">
-                <div className="flex size-[var(--currency-avatar-size)] items-center justify-center rounded-full bg-accent-soft font-data text-sm font-bold text-primary">
-                  {code}
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="font-data text-sm font-bold">{code}</div>
-                  <div className="text-xs text-muted-foreground">
-                    {t("rateLabel", { base: status.data.base, code })}
-                  </div>
-                </div>
-                <span className="font-data text-sm font-bold">
-                  {formatRate(locale, rate)}
-                </span>
-              </CardContent>
-            </Card>
+            <CurrencyCard
+              key={code}
+              code={code}
+              description={t("rateLabel", { base: status.data.base, code })}
+              rate={rate}
+              formatter={(value) => formatRate(locale, value)}
+            />
           ))}
         </section>
       ) : null}

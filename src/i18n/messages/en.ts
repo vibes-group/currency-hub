@@ -23,9 +23,8 @@ const en: typeof ru = {
       alerts: 'Alerts',
     },
     navigation: {
-      home: 'Home',
-      rates: 'Rates',
       convert: 'Convert',
+      list: 'List',
       settings: 'Settings',
     },
   },

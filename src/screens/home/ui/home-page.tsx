@@ -5,6 +5,7 @@ import {
   WifiOffIcon,
 } from "@/shared/icons";
 
+import { CurrencyCard, getCurrencyTrend } from "@/entities/currency";
 import { useTranslations } from "@/i18n";
 import { AppLayout } from "@/widgets/app-shell";
 import {
@@ -27,8 +28,8 @@ export function HomePage() {
 
   return (
     <AppLayout>
-      <section id="convert" className="flex flex-col gap-3">
-        <Card className="overflow-hidden border-0 bg-surface-inverse text-white shadow-[var(--shadow-converter)] dark:text-text-primary">
+      <section className="flex flex-col gap-3">
+        <Card className="overflow-hidden border-0 bg-surface-inverse text-white shadow-(--shadow-converter) dark:text-text-primary">
           <CardHeader className="gap-2">
             <div className="flex items-center justify-between gap-3">
               <Badge variant="secondary">EUR</Badge>
@@ -72,25 +73,14 @@ export function HomePage() {
 
         <div className="flex flex-col gap-2">
           {currencies.map(([code, value, trend]) => (
-            <Card key={code} className="rounded-md">
-              <CardContent className="flex items-center gap-3 p-3">
-                <div className="flex size-[var(--currency-avatar-size)] items-center justify-center rounded-full bg-accent-soft font-data text-sm font-bold text-primary">
-                  {code}
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="font-data text-sm font-bold">{code}</div>
-                  <div className="text-xs text-muted-foreground">
-                    {t("cachedRate")}
-                  </div>
-                </div>
-                <div className="flex flex-col items-end gap-1">
-                  <span className="font-data text-sm font-bold">{value}</span>
-                  <Badge variant={trend.startsWith("+") ? "secondary" : "destructive"}>
-                    {trend}
-                  </Badge>
-                </div>
-              </CardContent>
-            </Card>
+            <CurrencyCard
+              key={code}
+              code={code}
+              description={t("cachedRate")}
+              rate={value}
+              trend={getCurrencyTrend(trend)}
+              trendLabel={trend}
+            />
           ))}
         </div>
       </section>
