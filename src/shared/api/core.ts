@@ -1,4 +1,5 @@
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+export type ReqConfig = Omit<RequestConfig, 'url' | 'method' | 'body'>;
 
 /**
  * Конфигурация HTTP-запроса
@@ -324,10 +325,7 @@ export class ApiClient {
    * const controller = new AbortController();
    * const result = await api.get('/users', { signal: controller.signal });
    */
-  get<T>(
-    url: string,
-    config?: Omit<RequestConfig, 'url' | 'method'>,
-  ): Promise<T> {
+  get<T>(url: string, config?: ReqConfig): Promise<T> {
     return this.request<T>({
       ...(config || {}),
       url,
@@ -341,7 +339,7 @@ export class ApiClient {
    * @method post
    * @param {string} url - Относительный URL (без baseUrl)
    * @param {any} [body] - Тело запроса (будет сериализовано в JSON)
-   * @param {Omit<RequestConfig, 'url' | 'method' | 'body'>} [config] - Дополнительная конфигурация
+   * @param {ReqConfig} [config] - Дополнительная конфигурация
    * @returns {Promise<T>} Данные ответа
    *
    * @example
@@ -358,11 +356,7 @@ export class ApiClient {
    *   headers: { 'Content-Type': 'multipart/form-data' }
    * });
    */
-  post<T>(
-    url: string,
-    body?: any,
-    config?: Omit<RequestConfig, 'url' | 'method' | 'body'>,
-  ): Promise<T> {
+  post<T>(url: string, body?: any, config?: ReqConfig): Promise<T> {
     return this.request<T>({
       ...(config || {}),
       url,
@@ -377,18 +371,14 @@ export class ApiClient {
    * @method put
    * @param {string} url - Относительный URL (без baseUrl)
    * @param {any} [body] - Тело запроса
-   * @param {Omit<RequestConfig, 'url' | 'method' | 'body'>} [config] - Дополнительная конфигурация
+   * @param {ReqConfig} [config] - Дополнительная конфигурация
    * @returns {Promise<T>} Данные ответа
    *
    * @example
    * // Полное обновление пользователя
    * const updated = await api.put<User>('/users/1', { name: 'John', email: 'john@example.com' });
    */
-  put<T>(
-    url: string,
-    body?: any,
-    config?: Omit<RequestConfig, 'url' | 'method' | 'body'>,
-  ): Promise<T> {
+  put<T>(url: string, body?: any, config?: ReqConfig): Promise<T> {
     return this.request<T>({
       ...(config || {}),
       url,
@@ -403,18 +393,14 @@ export class ApiClient {
    * @method patch
    * @param {string} url - Относительный URL (без baseUrl)
    * @param {any} [body] - Тело запроса с частичными данными
-   * @param {Omit<RequestConfig, 'url' | 'method' | 'body'>} [config] - Дополнительная конфигурация
+   * @param {ReqConfig} [config] - Дополнительная конфигурация
    * @returns {Promise<T>} Данные ответа
    *
    * @example
    * // Частичное обновление (только имя)
    * const updated = await api.patch<User>('/users/1', { name: 'John' });
    */
-  patch<T>(
-    url: string,
-    body?: any,
-    config?: Omit<RequestConfig, 'url' | 'method' | 'body'>,
-  ): Promise<T> {
+  patch<T>(url: string, body?: any, config?: ReqConfig): Promise<T> {
     return this.request<T>({
       ...(config || {}),
       url,
@@ -428,7 +414,7 @@ export class ApiClient {
    *
    * @method delete
    * @param {string} url - Относительный URL (без baseUrl)
-   * @param {Omit<RequestConfig, 'url' | 'method'>} [config] - Дополнительная конфигурация
+   * @param {ReqConfig} [config] - Дополнительная конфигурация
    * @returns {Promise<T>} Данные ответа
    *
    * @example
@@ -439,10 +425,7 @@ export class ApiClient {
    * // DELETE с условием
    * await api.delete('/users/1', { query: { confirm: true } });
    */
-  delete<T>(
-    url: string,
-    config?: Omit<RequestConfig, 'url' | 'method'>,
-  ): Promise<T> {
+  delete<T>(url: string, config?: ReqConfig): Promise<T> {
     return this.request<T>({
       ...(config || {}),
       url,

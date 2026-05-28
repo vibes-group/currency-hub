@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { CurrencyCard } from "@/entities/currency";
+import { fxapiService, type FxapiLatestRatesResponse } from "@/entities/fxapi";
 import { useLocale, useTranslations } from "@/i18n";
-import { getLatestRates, type FxapiRatesResponse } from "@/shared/api";
 import { RefreshCcwIcon } from "@/shared/icons";
 import { Badge, Button, Card, CardContent, Skeleton } from "@/shared/ui";
 import { AppLayout } from "@/widgets/app-shell";
@@ -10,7 +10,7 @@ import { AppLayout } from "@/widgets/app-shell";
 type ListStatus =
   | { state: "loading" }
   | { state: "error"; message: string }
-  | { state: "ready"; data: FxapiRatesResponse };
+  | { state: "ready"; data: FxapiLatestRatesResponse };
 
 function formatRate(locale: string, rate: number) {
   return new Intl.NumberFormat(locale, {
@@ -28,7 +28,8 @@ export function ListPage() {
 
     setStatus({ state: "loading" });
 
-    getLatestRates("USD", controller.signal)
+    fxapiService
+      .getLatestRates({ base: "USD", signal: controller.signal })
       .then((data) => setStatus({ state: "ready", data }))
       .catch((error: unknown) => {
         if (controller.signal.aborted) {
