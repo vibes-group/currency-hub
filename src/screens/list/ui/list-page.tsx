@@ -1,11 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { CurrencyCard } from "@/entities/currency";
-import { fxapiService, type FxapiLatestRatesResponse } from "@/entities/fxapi";
+import {
+  fxapiService,
+  useFxapiCacheStore,
+  type FxapiLatestRatesResponse,
+} from "@/entities/fxapi";
 import { useLocale, useTranslations } from "@/i18n";
 import { RefreshCcwIcon } from "@/shared/icons";
 import { Badge, Button, Card, CardContent, Skeleton } from "@/shared/ui";
 import { AppLayout } from "@/widgets/app-shell";
+
+const BASE_CURRENCY = "USD";
 
 type ListStatus =
   | { state: "loading" }
@@ -22,17 +28,40 @@ export function ListPage() {
   const locale = useLocale();
   const t = useTranslations("List");
   const [status, setStatus] = useState<ListStatus>({ state: "loading" });
+  const isCacheHydrated = useFxapiCacheStore((state) => state.isHydrated);
+  const cacheLatestRates = useFxapiCacheStore((state) => state.cacheLatestRates);
 
   useEffect(() => {
-    const controller = new AbortController();
+    if (!isCacheHydrated) {
+      return;
+    }
 
-    setStatus({ state: "loading" });
+    const controller = new AbortController();
+    const cachedRates =
+      useFxapiCacheStore.getState().getCachedLatestRates(BASE_CURRENCY);
+
+    if (cachedRates) {
+      setStatus({ state: "ready", data: cachedRates.data });
+    } else {
+      setStatus({ state: "loading" });
+    }
 
     fxapiService
-      .getLatestRates("USD", { signal: controller.signal })
-      .then((data) => setStatus({ state: "ready", data }))
+      .getLatestRates(BASE_CURRENCY, { signal: controller.signal })
+      .then((data) => {
+        cacheLatestRates(data);
+        setStatus({ state: "ready", data });
+      })
       .catch((error: unknown) => {
         if (controller.signal.aborted) {
+          return;
+        }
+
+        const fallbackRates =
+          useFxapiCacheStore.getState().getCachedLatestRates(BASE_CURRENCY);
+
+        if (fallbackRates) {
+          setStatus({ state: "ready", data: fallbackRates.data });
           return;
         }
 
@@ -43,7 +72,7 @@ export function ListPage() {
       });
 
     return () => controller.abort();
-  }, [t]);
+  }, [cacheLatestRates, isCacheHydrated, t]);
 
   const rates = useMemo(() => {
     if (status.state !== "ready") {
@@ -76,12 +105,13 @@ export function ListPage() {
             </h1>
             <p className="text-sm text-muted-foreground">
               {t("description", {
-                base: status.state === "ready" ? status.data.base : "USD",
+                base:
+                  status.state === "ready" ? status.data.base : BASE_CURRENCY,
               })}
             </p>
           </div>
           <Badge variant="outline">
-            {status.state === "ready" ? status.data.base : "USD"}
+            {status.state === "ready" ? status.data.base : BASE_CURRENCY}
           </Badge>
         </div>
         {updatedAt ? (
