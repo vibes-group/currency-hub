@@ -1,25 +1,23 @@
-import { useTransition } from "react";
+import { useTransition } from 'react';
 
+import { routing, type Locale, useLocale, useSetLocale } from '@/i18n';
+import { GlobIcon } from '@/shared/icons';
 import {
-  routing,
-  type Locale,
-  useLocale,
-  useSetLocale,
-  useTranslations,
-} from "@/i18n";
-import { LanguagesIcon } from "@/shared/icons";
-import { ToggleGroup, ToggleGroupItem } from "@/shared/ui";
+  Button,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/shared/ui';
 
 export function LocaleToggle() {
   const locale = useLocale();
   const setLocale = useSetLocale();
-  const t = useTranslations("LocaleToggle");
   const [isPending, startTransition] = useTransition();
 
   return (
-    <ToggleGroup
-      type="single"
-      value={locale}
+    <Select
       onValueChange={(targetLocale) => {
         if (!routing.locales.includes(targetLocale as Locale)) {
           return;
@@ -29,18 +27,22 @@ export function LocaleToggle() {
           setLocale(targetLocale as Locale);
         });
       }}
-      variant="outline"
-      spacing={0}
-      aria-label={t("label")}
+      defaultValue={locale}
       disabled={isPending}
     >
-      <ToggleGroupItem value="ru" aria-label={t("ru")}>
-        <LanguagesIcon data-icon="inline-start" />
-        RU
-      </ToggleGroupItem>
-      <ToggleGroupItem value="en" aria-label={t("en")}>
-        EN
-      </ToggleGroupItem>
-    </ToggleGroup>
+      <SelectTrigger asChild>
+        <Button variant={'outline'}>
+          <GlobIcon />
+          <SelectValue />
+        </Button>
+      </SelectTrigger>
+      <SelectContent>
+        {['ru', 'en'].map((code) => (
+          <SelectItem key={code} value={code} className="text-sm">
+            {code.toUpperCase()}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 }

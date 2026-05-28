@@ -109,6 +109,21 @@ const en: typeof ru = {
       cachedRate: 'Cached exchange rate',
       target: 'Target',
     },
+    form: {
+      checkboxTitle: 'Checkbox Light',
+      checkboxDarkTitle: 'Checkbox Dark',
+      selectTitle: 'Dropdown',
+      selectPlaceholder: 'Select currency',
+      off: 'off',
+      on: 'on',
+      mix: 'mix',
+      currency: {
+        USD: { name: 'US Dollar' },
+        EUR: { name: 'Euro' },
+        GBP: { name: 'Pound sterling' },
+        JPY: { name: 'Japanese yen' },
+      },
+    },
   },
 };
 

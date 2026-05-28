@@ -107,6 +107,21 @@ const ru = {
       cachedRate: 'Курс из кеша',
       target: 'Target',
     },
+    form: {
+      checkboxTitle: 'Checkbox Light',
+      checkboxDarkTitle: 'Checkbox Dark',
+      selectTitle: 'Dropdown',
+      selectPlaceholder: 'Выберите валюту',
+      off: 'off',
+      on: 'on',
+      mix: 'mix',
+      currency: {
+        USD: { name: 'Доллар США' },
+        EUR: { name: 'Евро' },
+        GBP: { name: 'Фунт стерлингов' },
+        JPY: { name: 'Японская иена' },
+      },
+    },
   },
 };
 

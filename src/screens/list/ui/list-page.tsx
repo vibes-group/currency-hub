@@ -29,7 +29,7 @@ export function ListPage() {
     setStatus({ state: "loading" });
 
     fxapiService
-      .getLatestRates({ base: "USD", signal: controller.signal })
+      .getLatestRates("USD", { signal: controller.signal })
       .then((data) => setStatus({ state: "ready", data }))
       .catch((error: unknown) => {
         if (controller.signal.aborted) {

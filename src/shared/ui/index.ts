@@ -1,5 +1,6 @@
 export { Badge, badgeVariants } from "./badge";
 export { Button, buttonVariants } from "./button";
+export { Checkbox } from "./checkbox";
 export {
   Card,
   CardAction,
@@ -10,6 +11,14 @@ export {
   CardTitle,
 } from "./card";
 export { Input } from "./input";
+export {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./select";
 export { Separator } from "./separator";
 export { Skeleton } from "./skeleton";
 export { Toggle, toggleVariants } from "./toggle";
