@@ -1,5 +1,6 @@
 export { fxapiService, FxapiService } from './api/fxapi-service';
 export {
+  DEFAULT_TARGET_CURRENCY,
   useFxapiCacheStore,
   type FxapiLatestRatesCacheRecord,
 } from './model/fxapi-cache-store';

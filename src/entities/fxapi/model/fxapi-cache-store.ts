@@ -8,6 +8,8 @@ import type {
   FxapiLatestRatesResponse,
 } from './fxapi';
 
+export const DEFAULT_TARGET_CURRENCY: FxapiCurrencyCode = 'USD';
+
 export type FxapiLatestRatesCacheRecord = {
   data: FxapiLatestRatesResponse;
   cachedAt: string;
@@ -16,12 +18,22 @@ export type FxapiLatestRatesCacheRecord = {
 type FxapiCacheState = {
   isHydrated: boolean;
   latestRatesByBase: Record<FxapiCurrencyCode, FxapiLatestRatesCacheRecord>;
+  latestRatesLoadingByBase: Record<FxapiCurrencyCode, boolean>;
+  latestRatesErrorsByBase: Record<FxapiCurrencyCode, string | undefined>;
   favoriteCurrencyCodes: FxapiCurrencyCode[];
   targetCurrencyCode: FxapiCurrencyCode | null;
   cacheLatestRates: (data: FxapiLatestRatesResponse) => void;
   getCachedLatestRates: (
     base: FxapiCurrencyCode,
   ) => FxapiLatestRatesCacheRecord | undefined;
+  setLatestRatesLoading: (
+    base: FxapiCurrencyCode,
+    isLoading: boolean,
+  ) => void;
+  setLatestRatesError: (
+    base: FxapiCurrencyCode,
+    message: string | undefined,
+  ) => void;
   isFavoriteCurrency: (code: FxapiCurrencyCode) => boolean;
   toggleFavoriteCurrency: (code: FxapiCurrencyCode) => void;
   setTargetCurrency: (code: FxapiCurrencyCode) => void;
@@ -37,8 +49,10 @@ export const useFxapiCacheStore = create<FxapiCacheState>()(
     (set, get) => ({
       isHydrated: false,
       latestRatesByBase: {},
+      latestRatesLoadingByBase: {},
+      latestRatesErrorsByBase: {},
       favoriteCurrencyCodes: [],
-      targetCurrencyCode: null,
+      targetCurrencyCode: DEFAULT_TARGET_CURRENCY,
       cacheLatestRates: (data) => {
         const base = normalizeCurrencyCode(data.base);
 
@@ -53,10 +67,34 @@ export const useFxapiCacheStore = create<FxapiCacheState>()(
               cachedAt: new Date().toISOString(),
             },
           },
+          latestRatesErrorsByBase: {
+            ...state.latestRatesErrorsByBase,
+            [base]: undefined,
+          },
         }));
       },
       getCachedLatestRates: (base) =>
         get().latestRatesByBase[normalizeCurrencyCode(base)],
+      setLatestRatesLoading: (base, isLoading) => {
+        const normalizedCode = normalizeCurrencyCode(base);
+
+        set((state) => ({
+          latestRatesLoadingByBase: {
+            ...state.latestRatesLoadingByBase,
+            [normalizedCode]: isLoading,
+          },
+        }));
+      },
+      setLatestRatesError: (base, message) => {
+        const normalizedCode = normalizeCurrencyCode(base);
+
+        set((state) => ({
+          latestRatesErrorsByBase: {
+            ...state.latestRatesErrorsByBase,
+            [normalizedCode]: message,
+          },
+        }));
+      },
       isFavoriteCurrency: (code) =>
         get().favoriteCurrencyCodes.includes(normalizeCurrencyCode(code)),
       toggleFavoriteCurrency: (code) => {
@@ -88,6 +126,10 @@ export const useFxapiCacheStore = create<FxapiCacheState>()(
         targetCurrencyCode: state.targetCurrencyCode,
       }),
       onRehydrateStorage: () => (state) => {
+        if (state && !state.targetCurrencyCode) {
+          state.setTargetCurrency(DEFAULT_TARGET_CURRENCY);
+        }
+
         state?.setHydrated(true);
       },
     },

@@ -20,7 +20,7 @@ export function OfflineModeChip({ className }: { className?: string }) {
     >
       <Badge
         variant="destructive"
-        className="p-3 text-sm font-semibold shadow-[var(--shadow-floating)] backdrop-blur-lg"
+        className="p-3 text-sm font-semibold shadow-(--shadow-floating) backdrop-blur-lg"
       >
         <WifiOffIcon data-icon="inline-start" />
         offline mode

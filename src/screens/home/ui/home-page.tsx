@@ -2,7 +2,6 @@ import {
   ArrowRightLeftIcon,
   CheckCircle2Icon,
   RefreshCcwIcon,
-  WifiOffIcon,
 } from '@/shared/icons';
 
 import { CurrencyCard, getCurrencyTrend } from '@/entities/currency';
@@ -83,24 +82,6 @@ export function HomePage() {
             />
           ))}
         </div>
-      </section>
-
-      <section id="settings">
-        <Card className="rounded-lg bg-surface-subtle">
-          <CardContent className="flex items-center gap-3 p-4">
-            <div className="flex size-10 items-center justify-center rounded-full bg-card text-muted-foreground">
-              <WifiOffIcon className="size-5" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <h2 className="font-heading text-section-title font-semibold">
-                {t('offlineTitle')}
-              </h2>
-              <p className="text-sm text-muted-foreground">
-                {t('offlineDescription')}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
       </section>
     </AppLayout>
   );

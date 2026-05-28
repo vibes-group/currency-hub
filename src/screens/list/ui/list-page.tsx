@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import { CurrencyCard } from '@/entities/currency';
 import {
-  fxapiService,
+  DEFAULT_TARGET_CURRENCY,
   useFxapiCacheStore,
   type FxapiLatestRatesResponse,
 } from '@/entities/fxapi';
@@ -10,8 +10,6 @@ import { useLocale, useTranslations } from '@/i18n';
 import { RefreshCcwIcon } from '@/shared/icons';
 import { Badge, Button, Card, CardContent, Skeleton } from '@/shared/ui';
 import { AppLayout } from '@/widgets/app-shell';
-
-const BASE_CURRENCY = 'USD';
 
 type ListStatus =
   | { state: 'loading' }
@@ -21,57 +19,23 @@ type ListStatus =
 export function ListPage() {
   const locale = useLocale();
   const t = useTranslations('List');
-  const [status, setStatus] = useState<ListStatus>({ state: 'loading' });
-  const isCacheHydrated = useFxapiCacheStore((state) => state.isHydrated);
-
-  const cacheLatestRates = useFxapiCacheStore(
-    (state) => state.cacheLatestRates,
+  const targetCurrencyCode = useFxapiCacheStore(
+    (state) => state.targetCurrencyCode ?? DEFAULT_TARGET_CURRENCY,
   );
-
-  useEffect(() => {
-    if (!isCacheHydrated) {
-      return;
-    }
-
-    const controller = new AbortController();
-    const cachedRates = useFxapiCacheStore
-      .getState()
-      .getCachedLatestRates(BASE_CURRENCY);
-
-    if (cachedRates) {
-      setStatus({ state: 'ready', data: cachedRates.data });
-    } else {
-      setStatus({ state: 'loading' });
-    }
-
-    fxapiService
-      .getLatestRates(BASE_CURRENCY, { signal: controller.signal })
-      .then((data) => {
-        cacheLatestRates(data);
-        setStatus({ state: 'ready', data });
-      })
-      .catch((error: unknown) => {
-        if (controller.signal.aborted) {
-          return;
-        }
-
-        const fallbackRates = useFxapiCacheStore
-          .getState()
-          .getCachedLatestRates(BASE_CURRENCY);
-
-        if (fallbackRates) {
-          setStatus({ state: 'ready', data: fallbackRates.data });
-          return;
-        }
-
-        setStatus({
-          state: 'error',
-          message: error instanceof Error ? error.message : t('errorBody'),
-        });
-      });
-
-    return () => controller.abort();
-  }, [cacheLatestRates, isCacheHydrated, t]);
+  const cachedRates = useFxapiCacheStore(
+    (state) => state.latestRatesByBase[targetCurrencyCode],
+  );
+  const isLoading = useFxapiCacheStore(
+    (state) => state.latestRatesLoadingByBase[targetCurrencyCode] ?? false,
+  );
+  const errorMessage = useFxapiCacheStore(
+    (state) => state.latestRatesErrorsByBase[targetCurrencyCode],
+  );
+  const status: ListStatus = cachedRates
+    ? { state: 'ready', data: cachedRates.data }
+    : errorMessage && !isLoading
+      ? { state: 'error', message: errorMessage }
+      : { state: 'loading' };
 
   const rates = useMemo(() => {
     if (status.state !== 'ready') {
@@ -105,12 +69,14 @@ export function ListPage() {
             <p className="text-sm text-muted-foreground">
               {t('description', {
                 base:
-                  status.state === 'ready' ? status.data.base : BASE_CURRENCY,
+                  status.state === 'ready'
+                    ? status.data.base
+                    : targetCurrencyCode,
               })}
             </p>
           </div>
           <Badge variant="outline">
-            {status.state === 'ready' ? status.data.base : BASE_CURRENCY}
+            {status.state === 'ready' ? status.data.base : targetCurrencyCode}
           </Badge>
         </div>
         {updatedAt ? (
