@@ -1,20 +1,10 @@
-import {
-  ArrowRightLeftIcon,
-  CheckCircle2Icon,
-  RefreshCcwIcon,
-} from '@/shared/icons';
+import { CheckCircle2Icon } from '@/shared/icons';
 
 import { CurrencyCard, getCurrencyTrend } from '@/entities/currency';
+import { CurrencyConverterInput } from '@/features/currency-converter';
 import { useTranslations } from '@/i18n';
 import { AppLayout } from '@/widgets/app-shell';
-import {
-  Badge,
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/shared/ui';
+import { Badge } from '@/shared/ui';
 
 const currencies = [
   ['USD', '1.0000', '+0.24%'],
@@ -28,35 +18,7 @@ export function HomePage() {
   return (
     <AppLayout>
       <section className="flex flex-col gap-3">
-        <Card className="overflow-hidden border-0 bg-surface-inverse text-white shadow-(--shadow-converter) dark:text-text-primary">
-          <CardHeader className="gap-2">
-            <div className="flex items-center justify-between gap-3">
-              <Badge variant="secondary">EUR</Badge>
-              <Button size="icon" aria-label={t('refresh')}>
-                <RefreshCcwIcon />
-              </Button>
-            </div>
-            <CardTitle className="font-heading text-section-title">
-              {t('converterTitle')}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-4">
-            <div className="font-data text-amount font-bold leading-amount">
-              1 000
-            </div>
-            <div className="flex items-center justify-between gap-3 rounded-2xl bg-white/10 p-3">
-              <div className="flex min-w-0 flex-col">
-                <span className="text-xs text-white/60 dark:text-text-secondary">
-                  {t('result')}
-                </span>
-                <span className="font-data text-result font-bold">
-                  1 083.40 USD
-                </span>
-              </div>
-              <ArrowRightLeftIcon className="size-5 text-white/60 dark:text-text-secondary" />
-            </div>
-          </CardContent>
-        </Card>
+        <CurrencyConverterInput />
       </section>
 
       <section id="rates" className="flex flex-col gap-3">
