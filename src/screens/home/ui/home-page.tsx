@@ -2,22 +2,32 @@ import { CheckCircle2Icon } from '@/shared/icons';
 import { Link } from 'react-router';
 
 import { CurrencyCard } from '@/entities/currency';
-import { DEFAULT_TARGET_CURRENCY, useFxapiCacheStore } from '@/entities/fxapi';
-import { CurrencyConverterInput } from '@/features/currency-converter';
+import {
+  DEFAULT_TARGET_CURRENCY,
+  useFrankfurterCacheStore,
+} from '@/entities/frankfurter';
+import {
+  CurrencyConverterInput,
+  parseConverterAmount,
+  useCurrencyConverterStore,
+} from '@/features/currency-converter';
 import { useTranslations } from '@/i18n';
 import { AppLayout } from '@/widgets/app-shell';
 import { Badge, Button, Card, CardContent } from '@/shared/ui';
 
 export function HomePage() {
   const t = useTranslations('Home');
-  const targetCurrencyCode = useFxapiCacheStore(
+  const targetCurrencyCode = useFrankfurterCacheStore(
     (state) => state.targetCurrencyCode ?? DEFAULT_TARGET_CURRENCY,
   );
-  const favoriteCurrencyCodes = useFxapiCacheStore(
+  const favoriteCurrencyCodes = useFrankfurterCacheStore(
     (state) => state.favoriteCurrencyCodes,
   );
-  const cachedRates = useFxapiCacheStore(
+  const cachedRates = useFrankfurterCacheStore(
     (state) => state.latestRatesByBase[targetCurrencyCode],
+  );
+  const converterAmount = useCurrencyConverterStore((state) =>
+    parseConverterAmount(state.amount),
   );
 
   return (
@@ -49,8 +59,10 @@ export function HomePage() {
                 })}
                 rate={
                   code === targetCurrencyCode
-                    ? 1
-                    : cachedRates?.data.rates[code]
+                    ? converterAmount
+                    : cachedRates?.data.rates[code] !== undefined
+                      ? converterAmount * cachedRates.data.rates[code]
+                      : undefined
                 }
               />
             ))}

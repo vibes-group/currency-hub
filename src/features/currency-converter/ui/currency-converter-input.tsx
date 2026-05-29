@@ -1,26 +1,25 @@
-import { useState } from 'react';
-
-import { DEFAULT_TARGET_CURRENCY, useFxapiCacheStore } from '@/entities/fxapi';
+import {
+  DEFAULT_TARGET_CURRENCY,
+  useFrankfurterCacheStore,
+} from '@/entities/frankfurter';
 import { cn } from '@/shared/lib';
 
 import {
   formatConverterAmount,
   sanitizeConverterAmount,
 } from '../model/converter-amount';
+import { useCurrencyConverterStore } from '../model/converter-store';
 
 type CurrencyConverterInputProps = {
   className?: string;
-  defaultValue?: string;
 };
 
 export function CurrencyConverterInput({
   className,
-  defaultValue = '1000',
 }: CurrencyConverterInputProps) {
-  const [amount, setAmount] = useState(() =>
-    sanitizeConverterAmount(defaultValue),
-  );
-  const targetCurrencyCode = useFxapiCacheStore(
+  const amount = useCurrencyConverterStore((state) => state.amount);
+  const setAmount = useCurrencyConverterStore((state) => state.setAmount);
+  const targetCurrencyCode = useFrankfurterCacheStore(
     (state) => state.targetCurrencyCode ?? DEFAULT_TARGET_CURRENCY,
   );
 

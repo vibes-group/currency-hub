@@ -4,7 +4,10 @@ import { Badge, Button, Card, CardContent } from '@/shared/ui';
 
 import { getCurrencyTrend, type CurrencyTrend } from '../model/currency';
 import { useLocale } from '@/i18n';
-import { DEFAULT_TARGET_CURRENCY, useFxapiCacheStore } from '@/entities/fxapi';
+import {
+  DEFAULT_TARGET_CURRENCY,
+  useFrankfurterCacheStore,
+} from '@/entities/frankfurter';
 
 type CurrencyCardProps = {
   code: string;
@@ -44,16 +47,16 @@ export function CurrencyCard({
   const resolvedTrend = trend ?? getCurrencyTrend(trendLabel);
   const rateLabel = typeof rate === 'number' ? formatRate(locale, rate) : rate;
 
-  const toggleFavoriteCurrency = useFxapiCacheStore(
+  const toggleFavoriteCurrency = useFrankfurterCacheStore(
     (state) => state.toggleFavoriteCurrency,
   );
-  const setTargetCurrency = useFxapiCacheStore(
+  const setTargetCurrency = useFrankfurterCacheStore(
     (state) => state.setTargetCurrency,
   );
-  const isFavorite = useFxapiCacheStore((state) =>
+  const isFavorite = useFrankfurterCacheStore((state) =>
     state.favoriteCurrencyCodes.includes(code),
   );
-  const isTarget = useFxapiCacheStore(
+  const isTarget = useFrankfurterCacheStore(
     (state) => (state.targetCurrencyCode ?? DEFAULT_TARGET_CURRENCY) === code,
   );
 

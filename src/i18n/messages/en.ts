@@ -45,7 +45,7 @@ const en: typeof ru = {
       'Last synced rates will remain available even without a network.',
   },
   List: {
-    badge: 'fxapi.app',
+    badge: 'frankfurter.dev',
     title: 'All rates',
     description: 'All available values against {base}.',
     updatedAt: 'Updated: {value}',

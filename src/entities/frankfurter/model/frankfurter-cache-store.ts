@@ -4,47 +4,54 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 import { indexedDbStorage } from '@/shared/lib';
 
 import type {
-  FxapiCurrencyCode,
-  FxapiLatestRatesResponse,
-} from './fxapi';
+  FrankfurterCurrencyCode,
+  FrankfurterLatestRatesResponse,
+} from './frankfurter';
 
-export const DEFAULT_TARGET_CURRENCY: FxapiCurrencyCode = 'USD';
+export const DEFAULT_TARGET_CURRENCY: FrankfurterCurrencyCode = 'USD';
 
-export type FxapiLatestRatesCacheRecord = {
-  data: FxapiLatestRatesResponse;
+export type FrankfurterLatestRatesCacheRecord = {
+  data: FrankfurterLatestRatesResponse;
   cachedAt: string;
 };
 
-type FxapiCacheState = {
+type FrankfurterCacheState = {
   isHydrated: boolean;
-  latestRatesByBase: Record<FxapiCurrencyCode, FxapiLatestRatesCacheRecord>;
-  latestRatesLoadingByBase: Record<FxapiCurrencyCode, boolean>;
-  latestRatesErrorsByBase: Record<FxapiCurrencyCode, string | undefined>;
-  favoriteCurrencyCodes: FxapiCurrencyCode[];
-  targetCurrencyCode: FxapiCurrencyCode | null;
-  cacheLatestRates: (data: FxapiLatestRatesResponse) => void;
+  latestRatesByBase: Record<
+    FrankfurterCurrencyCode,
+    FrankfurterLatestRatesCacheRecord
+  >;
+  latestRatesLoadingByBase: Record<FrankfurterCurrencyCode, boolean>;
+  latestRatesErrorsByBase: Record<FrankfurterCurrencyCode, string | undefined>;
+  favoriteCurrencyCodes: FrankfurterCurrencyCode[];
+  targetCurrencyCode: FrankfurterCurrencyCode | null;
+  cacheLatestRates: (data: FrankfurterLatestRatesResponse) => void;
   getCachedLatestRates: (
-    base: FxapiCurrencyCode,
-  ) => FxapiLatestRatesCacheRecord | undefined;
+    base: FrankfurterCurrencyCode,
+  ) => FrankfurterLatestRatesCacheRecord | undefined;
   setLatestRatesLoading: (
-    base: FxapiCurrencyCode,
+    base: FrankfurterCurrencyCode,
     isLoading: boolean,
   ) => void;
   setLatestRatesError: (
-    base: FxapiCurrencyCode,
+    base: FrankfurterCurrencyCode,
     message: string | undefined,
   ) => void;
-  isFavoriteCurrency: (code: FxapiCurrencyCode) => boolean;
-  toggleFavoriteCurrency: (code: FxapiCurrencyCode) => void;
-  setTargetCurrency: (code: FxapiCurrencyCode) => void;
+  isFavoriteCurrency: (code: FrankfurterCurrencyCode) => boolean;
+  toggleFavoriteCurrency: (code: FrankfurterCurrencyCode) => void;
+  setTargetCurrency: (code: FrankfurterCurrencyCode) => void;
   setHydrated: (isHydrated: boolean) => void;
 };
 
-function normalizeCurrencyCode(code: FxapiCurrencyCode) {
+type PersistedFrankfurterCacheState = Partial<
+  Pick<FrankfurterCacheState, 'favoriteCurrencyCodes' | 'targetCurrencyCode'>
+>;
+
+function normalizeCurrencyCode(code: FrankfurterCurrencyCode) {
   return code.trim().toUpperCase();
 }
 
-export const useFxapiCacheStore = create<FxapiCacheState>()(
+export const useFrankfurterCacheStore = create<FrankfurterCacheState>()(
   persist(
     (set, get) => ({
       isHydrated: false,
@@ -119,12 +126,31 @@ export const useFxapiCacheStore = create<FxapiCacheState>()(
     }),
     {
       name: 'currency-hub:fxapi-cache',
+      version: 2,
       storage: createJSONStorage(() => indexedDbStorage),
       partialize: (state) => ({
         latestRatesByBase: state.latestRatesByBase,
         favoriteCurrencyCodes: state.favoriteCurrencyCodes,
         targetCurrencyCode: state.targetCurrencyCode,
       }),
+      migrate: (persistedState, version) => {
+        if (
+          version >= 2 ||
+          !persistedState ||
+          typeof persistedState !== 'object'
+        ) {
+          return persistedState as FrankfurterCacheState;
+        }
+
+        const state = persistedState as PersistedFrankfurterCacheState;
+
+        return {
+          latestRatesByBase: {},
+          favoriteCurrencyCodes: state.favoriteCurrencyCodes ?? [],
+          targetCurrencyCode:
+            state.targetCurrencyCode ?? DEFAULT_TARGET_CURRENCY,
+        };
+      },
       onRehydrateStorage: () => (state) => {
         if (state && !state.targetCurrencyCode) {
           state.setTargetCurrency(DEFAULT_TARGET_CURRENCY);

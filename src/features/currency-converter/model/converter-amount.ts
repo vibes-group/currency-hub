@@ -34,3 +34,9 @@ export function formatConverterAmount(value: string) {
 
   return formattedInteger;
 }
+
+export function parseConverterAmount(value: string) {
+  const parsedValue = Number(value);
+
+  return Number.isFinite(parsedValue) ? parsedValue : 0;
+}

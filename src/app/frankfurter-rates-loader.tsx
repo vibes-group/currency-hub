@@ -2,20 +2,24 @@ import { useEffect } from 'react';
 
 import {
   DEFAULT_TARGET_CURRENCY,
-  fxapiService,
-  useFxapiCacheStore,
-} from '@/entities/fxapi';
+  frankfurterService,
+  useFrankfurterCacheStore,
+} from '@/entities/frankfurter';
 
-export function FxapiRatesLoader() {
-  const isCacheHydrated = useFxapiCacheStore((state) => state.isHydrated);
-  const targetCurrencyCode = useFxapiCacheStore(
+export function FrankfurterRatesLoader() {
+  const isCacheHydrated = useFrankfurterCacheStore(
+    (state) => state.isHydrated,
+  );
+  const targetCurrencyCode = useFrankfurterCacheStore(
     (state) => state.targetCurrencyCode ?? DEFAULT_TARGET_CURRENCY,
   );
-  const cacheLatestRates = useFxapiCacheStore((state) => state.cacheLatestRates);
-  const setLatestRatesLoading = useFxapiCacheStore(
+  const cacheLatestRates = useFrankfurterCacheStore(
+    (state) => state.cacheLatestRates,
+  );
+  const setLatestRatesLoading = useFrankfurterCacheStore(
     (state) => state.setLatestRatesLoading,
   );
-  const setLatestRatesError = useFxapiCacheStore(
+  const setLatestRatesError = useFrankfurterCacheStore(
     (state) => state.setLatestRatesError,
   );
 
@@ -29,7 +33,7 @@ export function FxapiRatesLoader() {
     setLatestRatesLoading(targetCurrencyCode, true);
     setLatestRatesError(targetCurrencyCode, undefined);
 
-    fxapiService
+    frankfurterService
       .getLatestRates(targetCurrencyCode, { signal: controller.signal })
       .then((data) => {
         cacheLatestRates(data);

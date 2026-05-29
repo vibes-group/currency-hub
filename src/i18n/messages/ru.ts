@@ -43,7 +43,7 @@ const ru = {
       'Последние курсы будут доступны после синхронизации даже без сети.',
   },
   List: {
-    badge: 'fxapi.app',
+    badge: 'frankfurter.dev',
     title: 'Все курсы',
     description: 'Все доступные значения относительно {base}.',
     updatedAt: 'Обновлено: {value}',

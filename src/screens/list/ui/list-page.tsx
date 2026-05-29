@@ -3,9 +3,9 @@ import { useEffect, useMemo, useState } from 'react';
 import { CurrencyCard } from '@/entities/currency';
 import {
   DEFAULT_TARGET_CURRENCY,
-  useFxapiCacheStore,
-  type FxapiLatestRatesResponse,
-} from '@/entities/fxapi';
+  useFrankfurterCacheStore,
+  type FrankfurterLatestRatesResponse,
+} from '@/entities/frankfurter';
 import { useLocale, useTranslations } from '@/i18n';
 import { RefreshCcwIcon, SearchIcon } from '@/shared/icons';
 import { Badge, Button, Card, CardContent, Input, Skeleton } from '@/shared/ui';
@@ -14,7 +14,7 @@ import { AppLayout } from '@/widgets/app-shell';
 type ListStatus =
   | { state: 'loading' }
   | { state: 'error'; message: string }
-  | { state: 'ready'; data: FxapiLatestRatesResponse };
+  | { state: 'ready'; data: FrankfurterLatestRatesResponse };
 
 function useDebouncedValue(value: string, delay: number) {
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -35,16 +35,16 @@ export function ListPage() {
   const t = useTranslations('List');
   const [searchQuery, setSearchQuery] = useState('');
   const debouncedSearchQuery = useDebouncedValue(searchQuery, 250);
-  const targetCurrencyCode = useFxapiCacheStore(
+  const targetCurrencyCode = useFrankfurterCacheStore(
     (state) => state.targetCurrencyCode ?? DEFAULT_TARGET_CURRENCY,
   );
-  const cachedRates = useFxapiCacheStore(
+  const cachedRates = useFrankfurterCacheStore(
     (state) => state.latestRatesByBase[targetCurrencyCode],
   );
-  const isLoading = useFxapiCacheStore(
+  const isLoading = useFrankfurterCacheStore(
     (state) => state.latestRatesLoadingByBase[targetCurrencyCode] ?? false,
   );
-  const errorMessage = useFxapiCacheStore(
+  const errorMessage = useFrankfurterCacheStore(
     (state) => state.latestRatesErrorsByBase[targetCurrencyCode],
   );
   const status: ListStatus = cachedRates

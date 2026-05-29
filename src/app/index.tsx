@@ -1,5 +1,5 @@
 import { BrowserRouter } from 'react-router';
-import { FxapiRatesLoader } from './fxapi-rates-loader';
+import { FrankfurterRatesLoader } from './frankfurter-rates-loader';
 import { AppRouter } from './router';
 import { ThemeProvider } from './theme-provider';
 import { I18nProvider } from '@/i18n';
@@ -9,7 +9,7 @@ const App = () => {
     <ThemeProvider>
       <BrowserRouter>
         <I18nProvider>
-          <FxapiRatesLoader />
+          <FrankfurterRatesLoader />
           <AppRouter />
         </I18nProvider>
       </BrowserRouter>

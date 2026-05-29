@@ -2,8 +2,8 @@ import { useState } from 'react';
 
 import {
   DEFAULT_TARGET_CURRENCY,
-  useFxapiCacheStore,
-} from '@/entities/fxapi';
+  useFrankfurterCacheStore,
+} from '@/entities/frankfurter';
 import { cn } from '@/shared/lib';
 
 type ConverterInputProps = {
@@ -22,7 +22,7 @@ export function ConverterInput({
   defaultValue = '1000',
 }: ConverterInputProps) {
   const [value, setValue] = useState(defaultValue);
-  const targetCurrencyCode = useFxapiCacheStore(
+  const targetCurrencyCode = useFrankfurterCacheStore(
     (state) => state.targetCurrencyCode ?? DEFAULT_TARGET_CURRENCY,
   );
 
