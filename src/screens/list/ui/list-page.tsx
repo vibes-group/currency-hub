@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { CurrencyCard } from '@/entities/currency';
 import {
@@ -7,8 +7,8 @@ import {
   type FxapiLatestRatesResponse,
 } from '@/entities/fxapi';
 import { useLocale, useTranslations } from '@/i18n';
-import { RefreshCcwIcon } from '@/shared/icons';
-import { Badge, Button, Card, CardContent, Skeleton } from '@/shared/ui';
+import { RefreshCcwIcon, SearchIcon } from '@/shared/icons';
+import { Badge, Button, Card, CardContent, Input, Skeleton } from '@/shared/ui';
 import { AppLayout } from '@/widgets/app-shell';
 
 type ListStatus =
@@ -16,9 +16,25 @@ type ListStatus =
   | { state: 'error'; message: string }
   | { state: 'ready'; data: FxapiLatestRatesResponse };
 
+function useDebouncedValue(value: string, delay: number) {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [delay, value]);
+
+  return debouncedValue;
+}
+
 export function ListPage() {
   const locale = useLocale();
   const t = useTranslations('List');
+  const [searchQuery, setSearchQuery] = useState('');
+  const debouncedSearchQuery = useDebouncedValue(searchQuery, 250);
   const targetCurrencyCode = useFxapiCacheStore(
     (state) => state.targetCurrencyCode ?? DEFAULT_TARGET_CURRENCY,
   );
@@ -46,6 +62,15 @@ export function ListPage() {
       left.localeCompare(right),
     );
   }, [status]);
+  const filteredRates = useMemo(() => {
+    const normalizedQuery = debouncedSearchQuery.trim().toUpperCase();
+
+    if (!normalizedQuery) {
+      return rates;
+    }
+
+    return rates.filter(([code]) => code.includes(normalizedQuery));
+  }, [debouncedSearchQuery, rates]);
 
   const updatedAt =
     status.state === 'ready'
@@ -86,6 +111,18 @@ export function ListPage() {
         ) : null}
       </section>
 
+      <section className="relative">
+        <SearchIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+        <Input
+          aria-label={t('searchPlaceholder')}
+          className="h-11 rounded-2xl bg-card pl-9"
+          placeholder={t('searchPlaceholder')}
+          type="search"
+          value={searchQuery}
+          onChange={(event) => setSearchQuery(event.target.value)}
+        />
+      </section>
+
       {status.state === 'loading' ? (
         <section className="flex flex-col gap-2">
           {Array.from({ length: 8 }).map((_, index) => (
@@ -122,7 +159,7 @@ export function ListPage() {
 
       {status.state === 'ready' ? (
         <section className="flex flex-col gap-2">
-          {rates.map(([code, rate]) => (
+          {filteredRates.map(([code, rate]) => (
             <CurrencyCard
               key={code}
               code={code}
@@ -130,6 +167,18 @@ export function ListPage() {
               rate={rate}
             />
           ))}
+          {filteredRates.length === 0 ? (
+            <Card className="rounded-lg bg-surface-subtle">
+              <CardContent className="flex flex-col gap-1 p-4">
+                <h2 className="font-heading text-section-title font-semibold">
+                  {t('emptySearchTitle')}
+                </h2>
+                <p className="text-sm text-muted-foreground">
+                  {t('emptySearchDescription')}
+                </p>
+              </CardContent>
+            </Card>
+          ) : null}
         </section>
       ) : null}
     </AppLayout>

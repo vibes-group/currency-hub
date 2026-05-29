@@ -35,6 +35,11 @@ const en: typeof ru = {
     ratesTitle: 'Favorite currencies',
     live: 'Live',
     cachedRate: 'Cached exchange rate',
+    favoriteRate: '{base} / {code}',
+    chooseFavoritesTitle: 'Add favorite currencies',
+    chooseFavoritesDescription:
+      'Choose currencies from the full list to keep them on the home screen.',
+    chooseFavoritesAction: 'Choose currencies',
     offlineTitle: 'Offline mode is ready',
     offlineDescription:
       'Last synced rates will remain available even without a network.',
@@ -44,6 +49,9 @@ const en: typeof ru = {
     title: 'All rates',
     description: 'All available values against {base}.',
     updatedAt: 'Updated: {value}',
+    searchPlaceholder: 'Search currency',
+    emptySearchTitle: 'Currency not found',
+    emptySearchDescription: 'Try another currency code.',
     rateLabel: '{base} / {code}',
     errorTitle: 'Could not load rates',
     errorBody: 'Check the connection and retry the request.',

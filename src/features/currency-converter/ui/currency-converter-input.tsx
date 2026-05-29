@@ -44,7 +44,7 @@ export function CurrencyConverterInput({
           setAmount(sanitizeConverterAmount(event.target.value));
         }}
       />
-      <span className="flex h-16 min-w-28 shrink-0 items-center justify-center rounded-[32px] border border-border bg-white px-6 font-heading text-2xl font-bold text-[#111315] shadow-inner">
+      <span className="flex h-16 min-w-28 shrink-0 items-center justify-center rounded-4xl border border-border bg-white px-6 font-heading text-2xl font-bold text-[#111315] shadow-inner">
         {targetCurrencyCode}
       </span>
     </label>

@@ -33,6 +33,11 @@ const ru = {
     ratesTitle: 'Избранные валюты',
     live: 'Live',
     cachedRate: 'Курс из кеша',
+    favoriteRate: '{base} / {code}',
+    chooseFavoritesTitle: 'Добавьте избранные валюты',
+    chooseFavoritesDescription:
+      'Выберите валюты из общего списка, чтобы видеть их на главном экране.',
+    chooseFavoritesAction: 'Выбрать валюты',
     offlineTitle: 'Offline режим готов',
     offlineDescription:
       'Последние курсы будут доступны после синхронизации даже без сети.',
@@ -42,6 +47,9 @@ const ru = {
     title: 'Все курсы',
     description: 'Все доступные значения относительно {base}.',
     updatedAt: 'Обновлено: {value}',
+    searchPlaceholder: 'Поиск валюты',
+    emptySearchTitle: 'Валюта не найдена',
+    emptySearchDescription: 'Попробуйте другой код валюты.',
     rateLabel: '{base} / {code}',
     errorTitle: 'Не удалось загрузить курсы',
     errorBody: 'Проверь соединение и повтори запрос.',

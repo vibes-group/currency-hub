@@ -1,19 +1,24 @@
 import { CheckCircle2Icon } from '@/shared/icons';
+import { Link } from 'react-router';
 
-import { CurrencyCard, getCurrencyTrend } from '@/entities/currency';
+import { CurrencyCard } from '@/entities/currency';
+import { DEFAULT_TARGET_CURRENCY, useFxapiCacheStore } from '@/entities/fxapi';
 import { CurrencyConverterInput } from '@/features/currency-converter';
 import { useTranslations } from '@/i18n';
 import { AppLayout } from '@/widgets/app-shell';
-import { Badge } from '@/shared/ui';
-
-const currencies = [
-  ['USD', '1.0000', '+0.24%'],
-  ['EUR', '0.9228', '-0.08%'],
-  ['GBP', '0.7859', '+0.11%'],
-] as const;
+import { Badge, Button, Card, CardContent } from '@/shared/ui';
 
 export function HomePage() {
   const t = useTranslations('Home');
+  const targetCurrencyCode = useFxapiCacheStore(
+    (state) => state.targetCurrencyCode ?? DEFAULT_TARGET_CURRENCY,
+  );
+  const favoriteCurrencyCodes = useFxapiCacheStore(
+    (state) => state.favoriteCurrencyCodes,
+  );
+  const cachedRates = useFxapiCacheStore(
+    (state) => state.latestRatesByBase[targetCurrencyCode],
+  );
 
   return (
     <AppLayout>
@@ -32,18 +37,41 @@ export function HomePage() {
           </Badge>
         </div>
 
-        <div className="flex flex-col gap-2">
-          {currencies.map(([code, value, trend]) => (
-            <CurrencyCard
-              key={code}
-              code={code}
-              description={t('cachedRate')}
-              rate={value}
-              trend={getCurrencyTrend(trend)}
-              trendLabel={trend}
-            />
-          ))}
-        </div>
+        {favoriteCurrencyCodes.length > 0 ? (
+          <div className="flex flex-col gap-2">
+            {favoriteCurrencyCodes.map((code) => (
+              <CurrencyCard
+                key={code}
+                code={code}
+                description={t('favoriteRate', {
+                  base: targetCurrencyCode,
+                  code,
+                })}
+                rate={
+                  code === targetCurrencyCode
+                    ? 1
+                    : cachedRates?.data.rates[code]
+                }
+              />
+            ))}
+          </div>
+        ) : (
+          <Card className="rounded-lg bg-surface-subtle">
+            <CardContent className="flex flex-col gap-3 p-4">
+              <div className="flex flex-col gap-1">
+                <h3 className="font-heading text-section-title font-semibold">
+                  {t('chooseFavoritesTitle')}
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  {t('chooseFavoritesDescription')}
+                </p>
+              </div>
+              <Button asChild className="w-fit" size="sm">
+                <Link to="/list">{t('chooseFavoritesAction')}</Link>
+              </Button>
+            </CardContent>
+          </Card>
+        )}
       </section>
     </AppLayout>
   );
