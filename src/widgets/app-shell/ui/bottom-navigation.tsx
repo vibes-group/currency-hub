@@ -18,7 +18,7 @@ export function BottomNavigation() {
   const t = useTranslations('AppShell.navigation');
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 px-4 md:pb-4">
+    <nav className="fixed inset-x-0 bottom-0 z-40 px-4 pb-4">
       <div
         className={cn(
           'mx-auto h-(--bottom-nav-pill-height) w-full max-w-xl  rounded-full border p-1 shadow-(--shadow-floating) backdrop-blur-xl',
