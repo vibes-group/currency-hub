@@ -14,6 +14,9 @@ const ru = {
       dark: 'Переключить на темную тему',
     },
   },
+  InstallPwa: {
+    label: 'Установить приложение',
+  },
   AppShell: {
     header: {
       eyebrow: 'Курсы валют',

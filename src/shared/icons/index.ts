@@ -2,6 +2,7 @@ export {
   FiCheck as CheckIcon,
   FiCheckCircle as CheckCircle2Icon,
   FiChevronDown as ChevronDownIcon,
+  FiDownload as DownloadIcon,
   FiMoon as MoonIcon,
   FiMinus as MinusIcon,
   FiRefreshCcw as RefreshCcwIcon,

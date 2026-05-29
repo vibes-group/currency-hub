@@ -16,6 +16,9 @@ const en: typeof ru = {
       dark: 'Switch to dark theme',
     },
   },
+  InstallPwa: {
+    label: 'Install app',
+  },
   AppShell: {
     header: {
       eyebrow: 'Exchange rates',

@@ -19,6 +19,15 @@ const eslintConfig = defineConfig([
       "@typescript-eslint/no-explicit-any": "off",
     },
   },
+  {
+    files: ["public/sw.js"],
+    languageOptions: {
+      globals: {
+        ...globals.serviceworker,
+        fetch: "readonly",
+      },
+    },
+  },
   globalIgnores([
     ".next/**",
     "dist/**",

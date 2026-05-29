@@ -1,5 +1,6 @@
 import { LocaleToggle } from '@/features/change-locale';
 import { ThemeToggle } from '@/features/change-theme';
+import { InstallPwaButton } from '@/features/install-pwa';
 
 export function AppHeader() {
   return (
@@ -13,6 +14,7 @@ export function AppHeader() {
           </div>
 
           <div className="flex min-w-0 items-center gap-2 overflow-x-auto">
+            <InstallPwaButton />
             <LocaleToggle />
             <ThemeToggle />
           </div>
