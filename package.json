@@ -1,12 +1,13 @@
 {
   "name": "current-exchange",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "lint": "eslint"
+    "lint": "eslint",
+    "release": "standard-version"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.0",
@@ -31,6 +32,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
+    "standard-version": "^9.5.0",
     "tailwindcss": "^4.3.0",
     "typescript": "^5"
   },
