@@ -58,6 +58,17 @@ const ru = {
     errorBody: 'Проверь соединение и повтори запрос.',
     retry: 'Повторить',
   },
+  Settings: {
+    badge: 'Приложение',
+    title: 'Настройки',
+    description: 'Управление языком, темой и информацией о сборке.',
+    languageTitle: 'Язык',
+    languageDescription: 'Переключение языка интерфейса.',
+    themeTitle: 'Тема',
+    themeDescription: 'Переключение между светлым и темным режимом.',
+    versionTitle: 'Версия сборки',
+    versionDescription: 'Текущая версия приложения.',
+  },
   Demo: {
     badge: 'UI фундамент',
     title: 'Примитивы Currency Hub',

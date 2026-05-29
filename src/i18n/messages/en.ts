@@ -60,6 +60,17 @@ const en: typeof ru = {
     errorBody: 'Check the connection and retry the request.',
     retry: 'Retry',
   },
+  Settings: {
+    badge: 'Application',
+    title: 'Settings',
+    description: 'Manage language, theme, and build information.',
+    languageTitle: 'Language',
+    languageDescription: 'Switch the interface language.',
+    themeTitle: 'Theme',
+    themeDescription: 'Switch between light and dark modes.',
+    versionTitle: 'Build version',
+    versionDescription: 'Current application version.',
+  },
   Demo: {
     badge: 'UI foundation',
     title: 'Currency Hub primitives',

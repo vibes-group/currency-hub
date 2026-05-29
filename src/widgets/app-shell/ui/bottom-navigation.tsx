@@ -10,7 +10,7 @@ import { cn } from '@/shared/lib/utils';
 const navItems = [
   { href: '/', labelKey: 'convert', icon: ArrowRightLeftIcon },
   { href: '/list', labelKey: 'list', icon: ListCheckIcon },
-  { href: '/#settings', labelKey: 'settings', icon: SettingsIcon },
+  { href: '/settings', labelKey: 'settings', icon: SettingsIcon },
 ] as const;
 
 export function BottomNavigation() {
