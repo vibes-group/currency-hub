@@ -1,0 +1,51 @@
+name: Build and deploy frontend
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '**'
+      - '.github/workflows/frontend.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: frontend-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Build
+        run: |
+          bun install --frozen-lockfile
+          bun run build
+
+      - uses: actions/upload-artifact@v5
+        with:
+          name: currency-hub-dist
+          path: dist
+          if-no-files-found: error
+          retention-days: 7
+
+  deploy:
+    needs: build
+    permissions:
+      actions: read
+    uses: vibes-group/infra/.github/workflows/deploy-static.yml@master
+    with:
+      site: currency-hub
+      artifact: currency-hub-dist
+    secrets:
+      DEPLOY_HOST:     ${{ secrets.DEPLOY_HOST }}
+      DEPLOY_SSH_KEY:  ${{ secrets.DEPLOY_SSH_KEY }}
+      DEPLOY_HOST_KEY: ${{ secrets.DEPLOY_HOST_KEY }}
