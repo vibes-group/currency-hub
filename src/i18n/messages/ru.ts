@@ -16,6 +16,46 @@ const ru = {
   },
   InstallPwa: {
     label: 'Установить приложение',
+    title: 'Как установить приложение',
+    description:
+      'Этот браузер не позволяет запустить установку автоматически. Используйте системное меню.',
+    done: 'Понятно',
+    iosSafari: {
+      title: 'iPhone или iPad в Safari',
+      step1: 'Нажмите кнопку «Поделиться» в нижней панели Safari.',
+      step2: 'Выберите «На экран Домой».',
+      step3: 'Нажмите «Добавить».',
+    },
+    iosChrome: {
+      title: 'iPhone или iPad в Chrome',
+      step1: 'Нажмите кнопку «Поделиться» в Chrome.',
+      step2: 'Выберите «На экран Домой».',
+      step3: 'Если пункта нет, откройте сайт в Safari и повторите установку.',
+    },
+    androidChrome: {
+      title: 'Android в Chrome',
+      step1: 'Откройте меню браузера.',
+      step2: 'Выберите «Установить приложение» или «Добавить на главный экран».',
+      step3: 'Подтвердите установку.',
+    },
+    androidFirefox: {
+      title: 'Android в Firefox',
+      step1: 'Откройте меню браузера.',
+      step2: 'Выберите «Установить» или «Добавить на главный экран».',
+      step3: 'Подтвердите добавление приложения.',
+    },
+    desktopSafari: {
+      title: 'Safari на macOS',
+      step1: 'Откройте меню «Файл».',
+      step2: 'Выберите «Добавить в Dock».',
+      step3: 'Подтвердите добавление приложения.',
+    },
+    desktop: {
+      title: 'Браузер на компьютере',
+      step1: 'Откройте меню браузера.',
+      step2: 'Найдите пункт «Установить приложение» или «Добавить на главный экран».',
+      step3: 'Если пункта нет, попробуйте Chrome, Edge или Safari.',
+    },
   },
   AppShell: {
     header: {
@@ -80,6 +120,17 @@ const ru = {
       'Базовые CSS variables, доступные как Tailwind v4 theme tokens.',
     buttonsTitle: 'Кнопки',
     controlsTitle: 'Контролы',
+    dialogTitle: 'Диалог',
+    dialogDescription:
+      'Модальное окно с overlay, заголовком, описанием и действиями.',
+    dialogOpen: 'Открыть диалог',
+    dialogContentTitle: 'Изменение target валюты',
+    dialogContentDescription:
+      'Диалог можно использовать для подтверждений, выбора параметров или коротких форм.',
+    dialogBody:
+      'Фокус остается внутри окна, Escape закрывает диалог, а фон блокируется overlay.',
+    dialogCancel: 'Отмена',
+    dialogConfirm: 'Понятно',
     searchPlaceholder: 'Поиск валюты или кода',
     button: {
       primary: 'Основная',

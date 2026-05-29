@@ -5,6 +5,11 @@ type BeforeInstallPromptEvent = Event & {
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
 };
 
+export type PwaInstallGuide = {
+  device: 'ios' | 'android' | 'desktop';
+  browser: 'safari' | 'chrome' | 'edge' | 'firefox' | 'other';
+};
+
 function isStandaloneMode() {
   return (
     window.matchMedia('(display-mode: standalone)').matches ||
@@ -12,13 +17,43 @@ function isStandaloneMode() {
   );
 }
 
+function detectInstallGuide(): PwaInstallGuide {
+  const userAgent = navigator.userAgent;
+  const platform = navigator.platform;
+  const isIos =
+    /iPad|iPhone|iPod/.test(userAgent) ||
+    (platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const isAndroid = /Android/.test(userAgent);
+  const isEdge = /Edg\//.test(userAgent);
+  const isFirefox = /Firefox|FxiOS/.test(userAgent);
+  const isChrome = /Chrome|CriOS/.test(userAgent) && !isEdge;
+  const isSafari =
+    /Safari/.test(userAgent) && !isChrome && !isEdge && !isFirefox;
+
+  return {
+    device: isIos ? 'ios' : isAndroid ? 'android' : 'desktop',
+    browser: isSafari
+      ? 'safari'
+      : isChrome
+        ? 'chrome'
+        : isEdge
+          ? 'edge'
+          : isFirefox
+            ? 'firefox'
+            : 'other',
+  };
+}
+
 export function useInstallPwaPrompt() {
   const [installPrompt, setInstallPrompt] =
     useState<BeforeInstallPromptEvent | null>(null);
-  const [isStandalone, setIsStandalone] = useState(false);
+  const [isStandalone, setIsStandalone] = useState(isStandaloneMode);
+  const [installGuide, setInstallGuide] =
+    useState<PwaInstallGuide>(detectInstallGuide);
 
   useEffect(() => {
     setIsStandalone(isStandaloneMode());
+    setInstallGuide(detectInstallGuide());
 
     const handleBeforeInstallPrompt = (event: Event) => {
       event.preventDefault();
@@ -52,7 +87,9 @@ export function useInstallPwaPrompt() {
   };
 
   return {
-    canInstall: Boolean(installPrompt) && !isStandalone,
+    canShowInstallAction: !isStandalone,
+    hasNativeInstallPrompt: Boolean(installPrompt),
+    installGuide,
     install,
   };
 }

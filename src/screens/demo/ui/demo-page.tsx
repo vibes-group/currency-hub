@@ -22,6 +22,14 @@ import {
   CardHeader,
   CardTitle,
   Checkbox,
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
   Input,
   Select,
   SelectContent,
@@ -332,6 +340,56 @@ export function DemoPage() {
         <Separator />
 
         <FormControlsPreview />
+
+        <section className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="flex flex-col gap-1">
+            <h2 className="font-heading text-2xl font-semibold">
+              {t('dialogTitle')}
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              {t('dialogDescription')}
+            </p>
+          </div>
+
+          <Card>
+            <CardContent className="flex flex-col gap-4 p-4">
+              <div className="flex items-center justify-between gap-3 rounded-lg bg-surface-subtle p-4">
+                <div className="min-w-0">
+                  <div className="font-heading text-section-title font-semibold">
+                    {t('dialogContentTitle')}
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    {t('dialogContentDescription')}
+                  </p>
+                </div>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button>{t('dialogOpen')}</Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>{t('dialogContentTitle')}</DialogTitle>
+                      <DialogDescription>
+                        {t('dialogContentDescription')}
+                      </DialogDescription>
+                    </DialogHeader>
+                    <p className="text-sm text-muted-foreground">
+                      {t('dialogBody')}
+                    </p>
+                    <DialogFooter>
+                      <DialogClose asChild>
+                        <Button variant="outline">{t('dialogCancel')}</Button>
+                      </DialogClose>
+                      <DialogClose asChild>
+                        <Button>{t('dialogConfirm')}</Button>
+                      </DialogClose>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
 
         <section className="grid gap-4 md:grid-cols-3">
           <Card>

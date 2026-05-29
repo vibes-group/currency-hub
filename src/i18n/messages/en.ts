@@ -18,6 +18,46 @@ const en: typeof ru = {
   },
   InstallPwa: {
     label: 'Install app',
+    title: 'How to install the app',
+    description:
+      'This browser cannot start installation automatically. Use the system browser menu.',
+    done: 'Got it',
+    iosSafari: {
+      title: 'iPhone or iPad in Safari',
+      step1: 'Tap the Share button in the Safari bottom toolbar.',
+      step2: 'Choose “Add to Home Screen”.',
+      step3: 'Tap “Add”.',
+    },
+    iosChrome: {
+      title: 'iPhone or iPad in Chrome',
+      step1: 'Tap the Share button in Chrome.',
+      step2: 'Choose “Add to Home Screen”.',
+      step3: 'If the option is missing, open the site in Safari and install it there.',
+    },
+    androidChrome: {
+      title: 'Android in Chrome',
+      step1: 'Open the browser menu.',
+      step2: 'Choose “Install app” or “Add to Home screen”.',
+      step3: 'Confirm installation.',
+    },
+    androidFirefox: {
+      title: 'Android in Firefox',
+      step1: 'Open the browser menu.',
+      step2: 'Choose “Install” or “Add to Home screen”.',
+      step3: 'Confirm adding the app.',
+    },
+    desktopSafari: {
+      title: 'Safari on macOS',
+      step1: 'Open the File menu.',
+      step2: 'Choose “Add to Dock”.',
+      step3: 'Confirm adding the app.',
+    },
+    desktop: {
+      title: 'Desktop browser',
+      step1: 'Open the browser menu.',
+      step2: 'Find “Install app” or “Add to Home screen”.',
+      step3: 'If the option is missing, try Chrome, Edge, or Safari.',
+    },
   },
   AppShell: {
     header: {
@@ -82,6 +122,17 @@ const en: typeof ru = {
       'Core CSS variables exposed as Tailwind v4 theme tokens.',
     buttonsTitle: 'Buttons',
     controlsTitle: 'Controls',
+    dialogTitle: 'Dialog',
+    dialogDescription:
+      'Modal surface with overlay, title, description, and actions.',
+    dialogOpen: 'Open dialog',
+    dialogContentTitle: 'Change target currency',
+    dialogContentDescription:
+      'Use dialogs for confirmations, option picking, or short forms.',
+    dialogBody:
+      'Focus stays inside the modal, Escape closes it, and the page behind is blocked by the overlay.',
+    dialogCancel: 'Cancel',
+    dialogConfirm: 'Got it',
     searchPlaceholder: 'Search currency or code',
     button: {
       primary: 'Primary',
