@@ -2,7 +2,7 @@ name: Build and deploy frontend
 
 on:
   push:
-    branches: [master]
+    branches: [main]
     paths:
       - '**'
       - '.github/workflows/frontend.yml'
