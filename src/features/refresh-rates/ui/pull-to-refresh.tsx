@@ -1,4 +1,10 @@
-import { useRef, useState, type ReactNode, type TouchEvent } from 'react';
+import {
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+  type TouchEvent as ReactTouchEvent,
+} from 'react';
 
 import { RefreshCcwIcon } from '@/shared/icons';
 import { cn } from '@/shared/lib';
@@ -19,11 +25,74 @@ export function PullToRefresh({
   disabled = false,
   onRefresh,
 }: PullToRefreshProps) {
+  const rootRef = useRef<HTMLDivElement | null>(null);
   const touchStartY = useRef<number | null>(null);
+  const pullDistanceRef = useRef(0);
+  const disabledRef = useRef(disabled);
+  const isRefreshingRef = useRef(false);
   const [pullDistance, setPullDistance] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const handleTouchStart = (event: TouchEvent<HTMLDivElement>) => {
+  const updatePullDistance = (value: number) => {
+    pullDistanceRef.current = value;
+    setPullDistance(value);
+  };
+
+  useEffect(() => {
+    disabledRef.current = disabled;
+  }, [disabled]);
+
+  useEffect(() => {
+    isRefreshingRef.current = isRefreshing;
+  }, [isRefreshing]);
+
+  useEffect(() => {
+    const root = rootRef.current;
+
+    if (!root) {
+      return;
+    }
+
+    const handleNativeTouchMove = (event: TouchEvent) => {
+      if (
+        disabledRef.current ||
+        isRefreshingRef.current ||
+        touchStartY.current === null ||
+        window.scrollY > 0
+      ) {
+        return;
+      }
+
+      const currentY = event.touches[0]?.clientY;
+
+      if (currentY === undefined) {
+        return;
+      }
+
+      const distance = currentY - touchStartY.current;
+
+      if (distance <= 0) {
+        updatePullDistance(0);
+        return;
+      }
+
+      if (event.cancelable) {
+        event.preventDefault();
+      }
+
+      updatePullDistance(Math.min(distance * 0.5, MAX_PULL_DISTANCE));
+    };
+
+    root.addEventListener('touchmove', handleNativeTouchMove, {
+      passive: false,
+    });
+
+    return () => {
+      root.removeEventListener('touchmove', handleNativeTouchMove);
+    };
+  }, []);
+
+  const handleTouchStart = (event: ReactTouchEvent<HTMLDivElement>) => {
     if (disabled || isRefreshing || window.scrollY > 0) {
       touchStartY.current = null;
       return;
@@ -32,59 +101,38 @@ export function PullToRefresh({
     touchStartY.current = event.touches[0]?.clientY ?? null;
   };
 
-  const handleTouchMove = (event: TouchEvent<HTMLDivElement>) => {
-    if (touchStartY.current === null || window.scrollY > 0) {
-      return;
-    }
-
-    const currentY = event.touches[0]?.clientY;
-
-    if (currentY === undefined) {
-      return;
-    }
-
-    const distance = currentY - touchStartY.current;
-
-    if (distance <= 0) {
-      setPullDistance(0);
-      return;
-    }
-
-    setPullDistance(Math.min(distance * 0.5, MAX_PULL_DISTANCE));
-  };
-
   const handleTouchEnd = async () => {
-    const shouldRefresh = pullDistance >= REFRESH_THRESHOLD;
+    const shouldRefresh = pullDistanceRef.current >= REFRESH_THRESHOLD;
 
     touchStartY.current = null;
 
     if (!shouldRefresh) {
-      setPullDistance(0);
+      updatePullDistance(0);
       return;
     }
 
-    setPullDistance(REFRESH_THRESHOLD);
+    updatePullDistance(REFRESH_THRESHOLD);
     setIsRefreshing(true);
 
     try {
       await onRefresh();
     } finally {
       setIsRefreshing(false);
-      setPullDistance(0);
+      updatePullDistance(0);
     }
   };
 
   return (
     <div
+      ref={rootRef}
       data-slot="pull-to-refresh"
-      className={cn('relative overscroll-contain', className)}
+      className={cn('relative touch-pan-y overscroll-contain', className)}
       style={{
         transform:
           pullDistance > 0 ? `translateY(${pullDistance}px)` : undefined,
         transition: isRefreshing ? undefined : 'transform 180ms ease-out',
       }}
       onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
       onTouchCancel={handleTouchEnd}
     >
