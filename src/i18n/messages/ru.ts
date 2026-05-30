@@ -77,6 +77,7 @@ const ru = {
     live: 'Live',
     cachedRate: 'Курс из кеша',
     favoriteRate: '{base} / {code}',
+    updatedAt: 'Обновлено: {value}',
     chooseFavoritesTitle: 'Добавьте избранные валюты',
     chooseFavoritesDescription:
       'Выберите валюты из общего списка, чтобы видеть их на главном экране.',

@@ -11,11 +11,12 @@ import {
   parseConverterAmount,
   useCurrencyConverterStore,
 } from '@/features/currency-converter';
-import { useTranslations } from '@/i18n';
+import { useLocale, useTranslations } from '@/i18n';
 import { AppLayout } from '@/widgets/app-shell';
 import { Badge, Button, Card, CardContent } from '@/shared/ui';
 
 export function HomePage() {
+  const locale = useLocale();
   const t = useTranslations('Home');
   const targetCurrencyCode = useFrankfurterCacheStore(
     (state) => state.targetCurrencyCode ?? DEFAULT_TARGET_CURRENCY,
@@ -29,6 +30,12 @@ export function HomePage() {
   const converterAmount = useCurrencyConverterStore((state) =>
     parseConverterAmount(state.amount),
   );
+  const updatedAt = cachedRates
+    ? new Intl.DateTimeFormat(locale, {
+        dateStyle: 'medium',
+        timeStyle: 'short',
+      }).format(new Date(cachedRates.cachedAt))
+    : null;
 
   return (
     <AppLayout>
@@ -46,6 +53,11 @@ export function HomePage() {
             {t('live')}
           </Badge>
         </div>
+        {updatedAt ? (
+          <p className="text-xs text-muted-foreground">
+            {t('updatedAt', { value: updatedAt })}
+          </p>
+        ) : null}
 
         {favoriteCurrencyCodes.length > 0 ? (
           <div className="flex flex-col gap-2">

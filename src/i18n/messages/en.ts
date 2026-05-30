@@ -79,6 +79,7 @@ const en: typeof ru = {
     live: 'Live',
     cachedRate: 'Cached exchange rate',
     favoriteRate: '{base} / {code}',
+    updatedAt: 'Updated: {value}',
     chooseFavoritesTitle: 'Add favorite currencies',
     chooseFavoritesDescription:
       'Choose currencies from the full list to keep them on the home screen.',

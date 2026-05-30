@@ -73,11 +73,11 @@ export function ListPage() {
   }, [debouncedSearchQuery, rates]);
 
   const updatedAt =
-    status.state === 'ready'
+    cachedRates
       ? new Intl.DateTimeFormat(locale, {
           dateStyle: 'medium',
           timeStyle: 'short',
-        }).format(new Date(status.data.timestamp))
+        }).format(new Date(cachedRates.cachedAt))
       : null;
 
   return (
