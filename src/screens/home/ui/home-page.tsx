@@ -39,7 +39,7 @@ export function HomePage() {
 
   return (
     <AppLayout>
-      <section className="flex flex-col gap-3">
+      <section className="sticky top-[calc(3.75rem+env(safe-area-inset-top))] z-20 -mx-4 flex flex-col gap-3 bg-background/92 px-4 py-2 backdrop-blur-xl">
         <CurrencyConverterInput />
       </section>
 

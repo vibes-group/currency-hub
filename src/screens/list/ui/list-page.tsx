@@ -111,16 +111,18 @@ export function ListPage() {
         ) : null}
       </section>
 
-      <section className="relative">
-        <SearchIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-        <Input
-          aria-label={t('searchPlaceholder')}
-          className="h-11 rounded-2xl bg-card pl-9"
-          placeholder={t('searchPlaceholder')}
-          type="search"
-          value={searchQuery}
-          onChange={(event) => setSearchQuery(event.target.value)}
-        />
+      <section className="sticky top-[calc(3.75rem+env(safe-area-inset-top))] z-20 -mx-4 bg-background/92 px-4 py-2 backdrop-blur-xl">
+        <div className="relative">
+          <SearchIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            aria-label={t('searchPlaceholder')}
+            className="h-11 rounded-2xl bg-card pl-9"
+            placeholder={t('searchPlaceholder')}
+            type="search"
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.target.value)}
+          />
+        </div>
       </section>
 
       {status.state === 'loading' ? (
