@@ -6,6 +6,7 @@ import {
   useFrankfurterCacheStore,
   type FrankfurterLatestRatesResponse,
 } from '@/entities/frankfurter';
+import { PullToRefresh, useRefreshLatestRates } from '@/features/refresh-rates';
 import { useLocale, useTranslations } from '@/i18n';
 import { RefreshCcwIcon, SearchIcon } from '@/shared/icons';
 import { Badge, Button, Card, CardContent, Input, Skeleton } from '@/shared/ui';
@@ -47,6 +48,7 @@ export function ListPage() {
   const errorMessage = useFrankfurterCacheStore(
     (state) => state.latestRatesErrorsByBase[targetCurrencyCode],
   );
+  const refreshLatestRates = useRefreshLatestRates(targetCurrencyCode);
   const status: ListStatus = cachedRates
     ? { state: 'ready', data: cachedRates.data }
     : errorMessage && !isLoading
@@ -160,28 +162,30 @@ export function ListPage() {
       ) : null}
 
       {status.state === 'ready' ? (
-        <section className="flex flex-col gap-2">
-          {filteredRates.map(([code, rate]) => (
-            <CurrencyCard
-              key={code}
-              code={code}
-              description={t('rateLabel', { base: status.data.base, code })}
-              rate={rate}
-            />
-          ))}
-          {filteredRates.length === 0 ? (
-            <Card className="rounded-lg bg-surface-subtle">
-              <CardContent className="flex flex-col gap-1 p-4">
-                <h2 className="font-heading text-section-title font-semibold">
-                  {t('emptySearchTitle')}
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                  {t('emptySearchDescription')}
-                </p>
-              </CardContent>
-            </Card>
-          ) : null}
-        </section>
+        <PullToRefresh onRefresh={refreshLatestRates}>
+          <section className="flex flex-col gap-2">
+            {filteredRates.map(([code, rate]) => (
+              <CurrencyCard
+                key={code}
+                code={code}
+                description={t('rateLabel', { base: status.data.base, code })}
+                rate={rate}
+              />
+            ))}
+            {filteredRates.length === 0 ? (
+              <Card className="rounded-lg bg-surface-subtle">
+                <CardContent className="flex flex-col gap-1 p-4">
+                  <h2 className="font-heading text-section-title font-semibold">
+                    {t('emptySearchTitle')}
+                  </h2>
+                  <p className="text-sm text-muted-foreground">
+                    {t('emptySearchDescription')}
+                  </p>
+                </CardContent>
+              </Card>
+            ) : null}
+          </section>
+        </PullToRefresh>
       ) : null}
     </AppLayout>
   );

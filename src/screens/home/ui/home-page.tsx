@@ -11,6 +11,7 @@ import {
   parseConverterAmount,
   useCurrencyConverterStore,
 } from '@/features/currency-converter';
+import { PullToRefresh, useRefreshLatestRates } from '@/features/refresh-rates';
 import { useLocale, useTranslations } from '@/i18n';
 import { AppLayout } from '@/widgets/app-shell';
 import { Badge, Button, Card, CardContent } from '@/shared/ui';
@@ -30,6 +31,7 @@ export function HomePage() {
   const converterAmount = useCurrencyConverterStore((state) =>
     parseConverterAmount(state.amount),
   );
+  const refreshLatestRates = useRefreshLatestRates(targetCurrencyCode);
   const updatedAt = cachedRates
     ? new Intl.DateTimeFormat(locale, {
         dateStyle: 'medium',
@@ -60,25 +62,27 @@ export function HomePage() {
         ) : null}
 
         {favoriteCurrencyCodes.length > 0 ? (
-          <div className="flex flex-col gap-2">
-            {favoriteCurrencyCodes.map((code) => (
-              <CurrencyCard
-                key={code}
-                code={code}
-                description={t('favoriteRate', {
-                  base: targetCurrencyCode,
-                  code,
-                })}
-                rate={
-                  code === targetCurrencyCode
-                    ? converterAmount
-                    : cachedRates?.data.rates[code] !== undefined
-                      ? converterAmount * cachedRates.data.rates[code]
-                      : undefined
-                }
-              />
-            ))}
-          </div>
+          <PullToRefresh onRefresh={refreshLatestRates}>
+            <div className="flex flex-col gap-2">
+              {favoriteCurrencyCodes.map((code) => (
+                <CurrencyCard
+                  key={code}
+                  code={code}
+                  description={t('favoriteRate', {
+                    base: targetCurrencyCode,
+                    code,
+                  })}
+                  rate={
+                    code === targetCurrencyCode
+                      ? converterAmount
+                      : cachedRates?.data.rates[code] !== undefined
+                        ? converterAmount * cachedRates.data.rates[code]
+                        : undefined
+                  }
+                />
+              ))}
+            </div>
+          </PullToRefresh>
         ) : (
           <Card className="rounded-lg bg-surface-subtle">
             <CardContent className="flex flex-col gap-3 p-4">
