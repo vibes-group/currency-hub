@@ -43,7 +43,7 @@ jobs:
     needs: build
     permissions:
       actions: read
-    uses: vibes-group/deploy/.github/workflows/deploy-static.yml@master
+    uses: vibes-group/deploy/.github/workflows/deploy-static.yml@main
     with:
       site: currency-hub
       artifact: currency-hub-dist
